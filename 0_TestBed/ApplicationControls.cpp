@@ -211,7 +211,7 @@ void ApplicationClass::ProcessKeyboard(void)
 void ApplicationClass::ProcessMouse(void)
 {
 	m_bArcBall = false;
-	m_bFPC = false;
+	m_bFPC = true;
 	
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
 		m_bArcBall = true;
