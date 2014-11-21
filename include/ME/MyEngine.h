@@ -28,13 +28,8 @@ Date: 2014/07
 #include "ME\mesh\Animation\SequenceClass.h" //Manages the starting and ending point of an animation
 #include "ME\mesh\Animation\StateClass.h" //Manages the current state of the model
 
-#include "ME\mesh\debug\AxisFrameClass.h"  //Creates a frame object
-#include "ME\mesh\debug\AxisReferenceClass.h" //Creates an axis of reference
-#include "ME\mesh\debug\BoxManagerClass.h" //manage boxes of the objects
+#include "ME\mesh\debug\GridClass.h"  //Creates a frame object
 #include "ME\mesh\debug\LineManagerClass.h" //Manages lines
-
-#include "ME\mesh\physics\AABBClass.h" //Axis Aligned Bounding boxes
-#include "ME\mesh\physics\CollisionSystemClass.h" //Manages the collision system
 
 #include "ME\mesh\shape\PrimitiveClass.h" //Creates 3 Dimensional object primitives models based on shapes
 #include "ME\mesh\shape\PrimitiveWireClass.h" //Creates 3 Dimensional object primitives in wireframe mode based on shapes

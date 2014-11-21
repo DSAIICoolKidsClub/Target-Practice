@@ -3,7 +3,7 @@ void ApplicationClass::ProcessKeyboard(void)
 {
 	bool bModifier = false;
 	float fSpeed = 0.1f;
-	int nMesh = m_pModelManager->IdentifyInstance(m_sSelectedObject);
+	int nMesh = m_pModelMngr->IdentifyInstance(m_sSelectedObject);
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		exit(0);
@@ -46,55 +46,46 @@ void ApplicationClass::ProcessKeyboard(void)
 #pragma region Shaders
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
-		m_pModelManager->SetShaderProgram(m_sSelectedObject, "Shaders\\MEShader.vs","Shaders\\MEShaderInv.fs", "Inverse"); 
+		m_pModelMngr->SetShaderProgram(m_sSelectedObject, "Shaders\\MEShader.vs","Shaders\\MEShaderInv.fs", "Inverse"); 
 	}
 
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 	{
-		m_pModelManager->SetShaderProgram(m_sSelectedObject, "MEShader"); 
+		m_pModelMngr->SetShaderProgramByName(m_sSelectedObject, "Advance"); 
 	}
 #pragma endregion
 	//Model Positioning
 #pragma region Model Positioning
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		//matrix4 matrix = glm::translate( m_pModelManager->GetModelMatrix(m_sSelectedObject), vector3(-0.1f,0.0f,0.0f));
-		matrix4 matrix = glm::translate( matrix4(1.0f), vector3(-0.1f,0.0f,0.0f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
-		m_pModelManager->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBSMngr->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBBMngr->SetModelMatrix(matrix, m_sSelectedObject);
-		
+		//matrix4 matrix = glm::translate( m_pModelMngr->GetModelMatrix(m_sSelectedObject), vector3(-0.1f,0.0f,0.0f));
+		matrix4 matrix = glm::translate( matrix4(1.0f), vector3(-0.1f,0.0f,0.0f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
+		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		matrix4 matrix = glm::translate( matrix4(1.0f), vector3(0.1f,0.0f,0.0f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
-		m_pModelManager->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBSMngr->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBBMngr->SetModelMatrix(matrix, m_sSelectedObject);
+		matrix4 matrix = glm::translate( matrix4(1.0f), vector3(0.1f,0.0f,0.0f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
+		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		matrix4 matrix;
 		if(bModifier)
-			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.1f,0.0f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
+			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.1f,0.0f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
 		else
-			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.0f,-0.1f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
+			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.0f,-0.1f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
 		
-		m_pModelManager->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBSMngr->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBBMngr->SetModelMatrix(matrix, m_sSelectedObject);
+		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		matrix4 matrix;
 		if(bModifier)
-			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,-0.1f,0.0f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
+			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,-0.1f,0.0f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
 		else
-			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.0f,0.1f)) * m_pModelManager->GetModelMatrix(m_sSelectedObject);
+			matrix = glm::translate( matrix4(1.0f), vector3(0.0f,0.0f,0.1f)) * m_pModelMngr->GetModelMatrix(m_sSelectedObject);
 		
-		m_pModelManager->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBSMngr->SetModelMatrix(matrix, m_sSelectedObject);
-		m_pBBMngr->SetModelMatrix(matrix, m_sSelectedObject);
+		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
 #pragma endregion
 	//Model Loading
@@ -105,23 +96,77 @@ void ApplicationClass::ProcessKeyboard(void)
 		String sFileName = pFile.RetriveFileNameFromExplorer(L"OBJ Files (*.obj)\0*.obj\0WRL Files (*.wrl)\0*.wrl\0", L"obj");
 		if(sFileName != "")
 		{
-			m_pModelManager->DeleteInstance();
+			m_pModelMngr->DeleteInstance();
 			sFileName = pFile.GetFileNameAndExtension(sFileName);
-			m_pModelManager->LoadModel(sFileName, sFileName);
+			m_pModelMngr->LoadModel(sFileName, sFileName);
 		}
 		m_sSelectedObject = sFileName;
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F2))
 	{
-		m_pModelManager->DeleteInstance(m_sSelectedObject);
+		m_pModelMngr->DeleteInstance(m_sSelectedObject);
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F3))
 	{
-		m_pModelManager->DeleteInstance();//Nuke em all
+		m_pModelMngr->DeleteInstance();//Nuke em all
+	}
+#pragma endregion
+	//Model States
+#pragma region Model States
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad0))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 0);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad1))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 1);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad2))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 2);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad3))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 3);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad4))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 4);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad5))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 5);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad6))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 6);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad7))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 7);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad8))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 8);
+	}
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Numpad9))
+	{
+		m_pModelMngr->SetNextState( m_sSelectedObject, 9);
 	}
 #pragma endregion
 	//Debug
 #pragma region Debug
+	static bool bDebug = false;
+	static bool bWasF4Pressed = false; //Was pressed keeps its value for the rest of the program even if it leaves the scope
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F4))//Check the current state to see if its pressed right now
+	{
+		bWasF4Pressed = true;//if it is flag it
+	}
+	else if(bWasF4Pressed == true)//if its not currently pressed but it was pressed last...
+	{
+		bWasF4Pressed = false;//reset the flag
+	}
+
 	static bool bWasF5Pressed = false; //Was pressed keeps its value for the rest of the program even if it leaves the scope
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F5))//Check the current state to see if its pressed right now
 	{
@@ -129,13 +174,8 @@ void ApplicationClass::ProcessKeyboard(void)
 	}
 	else if(bWasF5Pressed == true)//if its not currently pressed but it was pressed last...
 	{
-		m_pBSMngr->RemoveSphere("ALL");//remove all spheres (if there are none currently nothing bad is going to happen)
-		for(int nInstance = 0; nInstance < m_pModelManager->GetNumberOfInstances(); nInstance++)//for all instances...
-		{
-			String sInstance = m_pModelManager->GetInstanceName(nInstance);//Create spheres
-			m_pBSMngr->AddSphere(sInstance);
-		}
-		m_pBSMngr->SetVisible(true, "ALL");//Make those spheres visible
+		bDebug = !bDebug;
+		m_pModelMngr->SetDebugByName(bDebug);
 		bWasF5Pressed = false;//reset the flag
 	}
 	
@@ -146,60 +186,10 @@ void ApplicationClass::ProcessKeyboard(void)
 	}
 	else if(bWasF6Pressed == true)//if its not currently pressed but it was pressed last...
 	{
-		m_pBBMngr->RemoveBox("ALL");//remove all spheres (if there are none currently nothing bad is going to happen)
-		for(int nInstance = 0; nInstance < m_pModelManager->GetNumberOfInstances(); nInstance++)//for all instances...
-		{
-			String sInstance = m_pModelManager->GetInstanceName(nInstance);//Create spheres
-			m_pBBMngr->AddBox(sInstance);
-		}
-		m_pBBMngr->SetVisible(true, "ALL");//Make those spheres visible
+		static bool bAxisVisible = false;
+		bAxisVisible = ! bAxisVisible;
+		m_pModelMngr->SetVisibleAxis( bAxisVisible, "All", true);
 		bWasF6Pressed = false;//reset the flag
-	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F7))
-	{
-		m_pBSMngr->RemoveSphere("ALL");
-		m_pBBMngr->RemoveBox("ALL");
-	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F8))
-	{
-		m_pModelManager->SetCoordinateSystemVisible(true, "ALL");
-		m_pModelManager->SetBoundingSphereColor(MEMAGENTA, "ALL");
-		m_pModelManager->SetBoundingSphereVisible(true, "ALL");
-
-		/*m_pModelManager->SetBoundingSphereColor(MEGREEN, m_sSelectedObject);
-		m_pModelManager->SetBoundingSphereVisible(true, m_sSelectedObject);*/
-		
-		/*BSClass* oBS = m_pModelManager->GetBoundingSphere(m_sSelectedObject);
-		if(oBS != nullptr)
-		{
-			oBS->SetColor(MEBLUE);
-			oBS->SetVisible(true);
-		}*/
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F9))
-	{
-		if(bModifier)
-		{
-			m_pModelManager->SetDebugMode(false);
-		}
-		else
-			m_pModelManager->SetDebugMode(true);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F10))
-	{
-		if(bModifier)
-			m_pModelManager->SetShowAABB(false);
-		else
-			m_pModelManager->SetShowAABB(true);
-	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::F11))
-	{
-		if(bModifier)
-			m_pModelManager->SetShowOBB(false);
-		else
-			m_pModelManager->SetShowOBB(true);
 	}
 #pragma endregion
 	//Camera
@@ -238,17 +228,14 @@ void ApplicationClass::ProcessMouse(void)
 	{
 		if(bLeft_Released == true)
 		{
-			m_pModelManager->SetDebug(false, "ALL");
-			String sName = m_pModelManager->ShootRay(
-														sf::Mouse::getPosition().x,
-														sf::Mouse::getPosition().y,
-														m_pCamera0,
-														false
-													);
-			if(sName != "NULL")
+			m_pModelMngr->SetDebugByName(false);
+			vector2 v2Intersection = m_pModelMngr->ShootRay(	sf::Mouse::getPosition().x,
+																sf::Mouse::getPosition().y,
+																m_pCamera0, false);
+			if(v2Intersection.x >= 0 && v2Intersection.y >= 0)
 			{
-				m_sSelectedObject = sName;
-				printf("\nObject: %s\n", sName.c_str());
+				m_pModelMngr->SetDebugByNumber(true, static_cast<int>(v2Intersection.x), static_cast<int>(v2Intersection.y));
+				m_sSelectedObject = m_pModelMngr->GetInstanceName(static_cast<int>(v2Intersection.x));
 			}
 		}
 		bLeft_Released = false;
@@ -312,6 +299,50 @@ void ApplicationClass::ProcessJoystick(void)
 		
 	}
 }
+void ApplicationClass::CameraRotation(float a_fSpeed)
+{
+	UINT	MouseX, MouseY;		// Coordinates for the mouse
+	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
+
+	CenterX = m_pSystem->WindowX + m_pSystem->WindowWidth / 2;
+	CenterY = m_pSystem->WindowY + m_pSystem->WindowHeight / 2;
+	
+	float DeltaMouse;
+	POINT pt;
+
+	GetCursorPos(&pt);
+	
+	MouseX = pt.x;
+	MouseY = pt.y;
+
+	SetCursorPos(CenterX, CenterY);
+
+	static float fAngleX = 0.0f;
+	static float fAngleY = 0.0f;
+
+	if(MouseX < CenterX)
+	{
+		DeltaMouse = static_cast<float>(CenterX - MouseX);
+		fAngleY += DeltaMouse * a_fSpeed;
+	}
+	else if(MouseX > CenterX)
+	{
+		DeltaMouse = static_cast<float>(MouseX - CenterX);
+		fAngleY -= DeltaMouse * a_fSpeed;
+	}
+
+	if(MouseY < CenterY)
+	{
+		DeltaMouse = static_cast<float>(CenterY - MouseY);
+		fAngleX -= DeltaMouse * a_fSpeed;
+	}
+	else if(MouseY > CenterY)
+	{
+		DeltaMouse = static_cast<float>(MouseY - CenterY);
+		fAngleX += DeltaMouse * a_fSpeed;
+	}
+	m_pCamera0->Rotate(fAngleX, fAngleY);
+}
 void ApplicationClass::ArcBall(float a_fSensitivity)
 {
 	static matrix4 arcball = matrix4(1.0);
@@ -359,52 +390,5 @@ void ApplicationClass::ArcBall(float a_fSensitivity)
 	}
 
 	//m_pCamera0->Rotate(fVerticalAngle, fHorizontalAngle);
-	m_pModelManager->SetModelMatrix(arcball, m_sSelectedObject);
-	m_pBSMngr->SetModelMatrix(arcball, m_sSelectedObject);
-	m_pBBMngr->SetModelMatrix(arcball, m_sSelectedObject);
-	//m_pPrimitive->SetModelMatrix(arcball);
-}
-void ApplicationClass::CameraRotation(float a_fSpeed)
-{
-	UINT	MouseX, MouseY;		// Coordinates for the mouse
-	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
-
-	CenterX = m_pSystem->WindowX + m_pSystem->WindowWidth / 2;
-	CenterY = m_pSystem->WindowY + m_pSystem->WindowHeight / 2;
-	
-	float DeltaMouse;
-	POINT pt;
-
-	GetCursorPos(&pt);
-	
-	MouseX = pt.x;
-	MouseY = pt.y;
-
-	SetCursorPos(CenterX, CenterY);
-
-	static float fAngleX = 0.0f;
-	static float fAngleY = 0.0f;
-
-	if(MouseX < CenterX)
-	{
-		DeltaMouse = static_cast<float>(CenterX - MouseX);
-		fAngleY += DeltaMouse * a_fSpeed;
-	}
-	else if(MouseX > CenterX)
-	{
-		DeltaMouse = static_cast<float>(MouseX - CenterX);
-		fAngleY -= DeltaMouse * a_fSpeed;
-	}
-
-	if(MouseY < CenterY)
-	{
-		DeltaMouse = static_cast<float>(CenterY - MouseY);
-		fAngleX -= DeltaMouse * a_fSpeed;
-	}
-	else if(MouseY > CenterY)
-	{
-		DeltaMouse = static_cast<float>(MouseY - CenterY);
-		fAngleX += DeltaMouse * a_fSpeed;
-	}
-	m_pCamera0->Rotate(fAngleX, fAngleY);
+	m_pModelMngr->SetModelMatrix(arcball, m_sSelectedObject);
 }

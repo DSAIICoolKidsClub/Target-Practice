@@ -1,8 +1,8 @@
 /*--------------------------------------------------------------------------------------------------
 Created by Alberto Bobadilla (labigm@rit.edu) in 2013
 --------------------------------------------------------------------------------------------------*/
-#ifndef __WIREFRAMECLASS_H_
-#define __WIREFRAMECLASS_H_
+#ifndef __PRIMITIVEWIRECLASS_H_
+#define __PRIMITIVEWIRECLASS_H_
 
 #include "ME\mesh\shape\ShapeClass.h"
 
@@ -25,6 +25,7 @@ public:
 	~PrimitiveWireClass(void);
 
 	//Generates a shape
+	void GenerateAxis(void);
 	void GenerateCube(float a_fSize, vector3 a_vColor);
 	void GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions, vector3 a_vColor);
 	void GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisions, vector3 a_vColor);
@@ -33,7 +34,8 @@ public:
 	
 	//Renders the content of the shape
 	virtual void Render(GLenum mode = GL_TRIANGLES);
-	virtual void Render(matrix4 a_mModelMatrix, vector3 a_vColor = MEDEFAULT);
+	virtual void Render(matrix4 a_mModelMatrix, vector3 a_vColor); //MEDEFAULT for default colors
+	virtual void Render(matrix4 a_mModelMatrix);
 
 private:
 	void CompileObject(vector3 a_vColor, String a_sName);
@@ -46,4 +48,4 @@ EXPIMP_TEMPLATE template class MyEngineDLL std::vector<PrimitiveWireClass*>;
 
 }
 
-#endif //__WIREFRAMCLASS_H_
+#endif //__PRIMITIVEWIRECLASS_H_

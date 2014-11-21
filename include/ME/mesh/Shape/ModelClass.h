@@ -11,6 +11,8 @@ Created by Alberto Bobadilla (labigm@rit.edu) in 2013
 #include "ME\mesh\Animation\SequenceClass.h"
 #include "ME\mesh\Animation\StateClass.h"
 
+#include "mesh\physics\BoundingObjectClass.h"
+
 namespace MyEngine
 {
 
@@ -18,23 +20,26 @@ class MyEngineDLL ModelClass
 {	
 	SystemClass* m_pSystem;
 	MaterialManagerClass* m_pMaterialManager;
+	std::thread* m_Thread;
 
-	String m_sModelName;
 	bool m_bLoaded;
 	bool m_bBinded;
-	int m_nMaterials;
-	int m_nGroups;
-	std::vector<GroupClass> m_vGroup;
-	int m_nStates;
-	std::vector<StateClass*> m_vpState;
-	std::thread* m_Thread;
-	int m_nHP;
 	bool m_bVisible;
 	bool m_bCollidable;
-	std::vector<SequenceClass> m_vSecuence;
 
-	AxisReferenceClass* m_pAxis;
-	std::vector<AABBClass*> m_vAABB;
+	int m_nMaterials;
+	int m_nGroups;
+	int m_nFrames;
+	int m_nStates;
+	int m_nHP;
+
+	String m_sModelName;
+		
+	std::vector<GroupClass> m_vGroup;
+	std::vector<SequenceClass> m_vSecuence;
+	std::vector<BoundingObjectClass*> m_vBoundingObject;
+	std::vector<StateClass*> m_vpState;
+
 public:
 	ModelClass(void);
 	ModelClass(const ModelClass& other);
@@ -69,7 +74,7 @@ public:
 	void SetVisible(bool a_bVisible);
 	bool GetVisible(void);
 
-	std::vector<vector3> GetVertices(int nGroup = 0, int nShape = 0);
+	std::vector<vector3> GetVertices(int nGroup = -1, int nShape = -1);
 
 	int GetNumberOfFrames(void);
 
@@ -77,9 +82,8 @@ public:
 
 	int GetStates(void);
 	StateClass* GetState(int a_nState);
-	AxisReferenceClass* GetAxis(void);
-	AABBClass* GetAABB(int a_nObject);
-		
+	
+	BoundingObjectClass* GetBoundingObject(int a_nFrame);
 private:
 	void Init(void);
 	MEErrors LoadThreadedOBJ(String a_sFileName);
@@ -92,7 +96,7 @@ private:
 	GroupClass* GetGroup(String a_sName);
 
 	StateClass* GetState(String a_sName);
-	void CalculateMaxAndMin(void);
+
 };
 
 EXPIMP_TEMPLATE template class MyEngineDLL std::vector<ModelClass>;

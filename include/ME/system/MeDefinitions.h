@@ -5,6 +5,8 @@ Date: 2014/05
 #ifndef __MEDEFINITIONS_H_
 #define __MEDEFINITIONS_H_
 
+#define SafeDelete(p){ if(p) { delete p; p = nullptr; } }
+
 namespace MyEngine
 {
 //-----------------------------------------------------------------------------------------------------------
@@ -31,6 +33,13 @@ enum MEErrors
 	ERROR_FILE = 7,
 	DONE = 8,
 	RUNNING = 9,
+};
+enum MEAXIS
+{
+	NONE = 0,
+	XY = 1,
+	XZ = 2,
+	YZ = 4,
 };
 
 #define PI 3.14159265358979323846

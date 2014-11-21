@@ -34,13 +34,26 @@ typedef glm::vec3 vector3;
 typedef glm::vec4 vector4;
 typedef glm::mat4 matrix4;
 
-#define MEWHITE vector3(1.0f, 1.0f, 1.0f)
-#define MERED vector3(1.0f, 0.0f, 0.0f)
-#define MEGREEN vector3(0.0f, 1.0f, 0.0f)
-#define MEBLUE vector3(0.0f, 0.0f, 1.0f)
 #define MEBLACK vector3(0.0f, 0.0f, 0.0f)
-#define MEYELLOW vector3(1.0f, 1.0f, 0.0f)
+#define MEWHITE vector3(1.0f, 1.0f, 1.0f)
+#define MEGRAY vector3(0.3f, 0.3f, 0.3f)
+
+#define MERED vector3(1.0f, 0.0f, 0.0f)
 #define MEMAGENTA vector3(1.0f, 0.0f, 1.0f)
+#define MEBROWN vector3(0.6f,0.3f,0.0f)
+
+#define MEGREEN vector3(0.0f, 1.0f, 0.0f)
+#define MEGREENDARK vector3(0.0f, 5.0f, 0.0f)
+#define MELIME vector3(0.33f,0.90f,0.33f)
+
+#define MEBLUE vector3(0.0f, 0.0f, 1.0f)
+#define MECYAN vector3(0.0f,1.0f,1.0f)
+
+#define MEYELLOW vector3(1.0f, 1.0f, 0.0f)
+#define MEORANGE vector3(1.0f,0.5f,0.0f)
+#define MEVIOLET vector3(0.54f,0.16f,0.88f)
+#define MEPURPLE vector3(0.50f,0.0f,0.50f)
+
 #define MEDEFAULT vector3(-1.0f, -1.0f, -1.0f)
 
 //System Class

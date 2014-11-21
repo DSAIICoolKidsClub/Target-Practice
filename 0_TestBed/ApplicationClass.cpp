@@ -29,13 +29,12 @@ ApplicationClass* ApplicationClass::GetInstance( HINSTANCE hInstance, LPWSTR lpC
 	}
 	return m_pInstance;
 }
-
 ApplicationClass::ApplicationClass()
 {
 	m_pSystem = nullptr;
 	m_pWindow = nullptr;
 	m_pGLSystem = nullptr;
-	m_pModelManager = nullptr;
+	m_pModelMngr = nullptr;
 	m_pLightMngr = nullptr;
 }
 ApplicationClass::ApplicationClass(ApplicationClass const& other){}
@@ -45,20 +44,22 @@ ApplicationClass::~ApplicationClass()
 	Release();
 	ReleaseInstance();
 };
-
 void ApplicationClass::ReleaseInstance()
 {
-	if(m_pBSMngr != nullptr)
+	//SafeDelete(m_pLightBulb);
+
+	if(pGrid != nullptr)
 	{
-		m_pBSMngr->ReleaseInstance();
+		delete pGrid;
+		pGrid = nullptr;
 	}
 	if( m_pLightMngr != nullptr)
 	{
 		m_pLightMngr->ReleaseInstance();
 	}
-	if(	m_pModelManager != nullptr)
+	if(	m_pModelMngr != nullptr)
 	{
-		m_pModelManager->ReleaseInstance();
+		m_pModelMngr->ReleaseInstance();
 	}
 	if(	m_pGLSystem != nullptr)
 	{
@@ -74,7 +75,6 @@ void ApplicationClass::ReleaseInstance()
 		m_pSystem->ReleaseInstance();
 	}
 }
-
 void ApplicationClass::Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	// Is this running out of Visual Studio?
@@ -120,17 +120,16 @@ void ApplicationClass::Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow
 		else
 			m_pSystem->m_RenderingContext = OPENGL2X;
 
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.4f, 0.6f, 0.9f, 0.0f);
 	}
 
 	m_pCamera0 = CameraClass::GetInstance();
-	m_pModelManager = ModelManagerClass::GetInstance();
+	m_pModelMngr = ModelManagerClass::GetInstance();
 	InitAppInternalVariables();
 	InitAppVariables();
 
 	printf("\n");
 }
-
 void ApplicationClass::ReadConfig(void)
 {
 	if(m_bForceNewConfig == true)
@@ -256,7 +255,6 @@ void ApplicationClass::ReadConfig(void)
 	reader.CloseFile();
 	
 }
-
 void ApplicationClass::WriteConfig(void)
 {
 	String sRoot = m_pSystem->m_pFolder->GetFolderRoot();
@@ -316,11 +314,9 @@ void ApplicationClass::WriteConfig(void)
 
 	fclose(pFile);
 }
-
 void ApplicationClass::Reshape(int a_nWidth, int a_nHeight)
 {
 }
-
 void ApplicationClass::Run (void)
 {
 	MSG msg = {0};
@@ -353,11 +349,9 @@ void ApplicationClass::Run (void)
 		Idle();
 	}
 }
-
 void ApplicationClass::DisplayDX (void) //for DirectX Applications
 {
 }
-
 void ApplicationClass::Display2X (void) //for OpenGL 2.X Applications
 {
 	m_pGLSystem->DrawOldGLScene();
@@ -366,7 +360,6 @@ void ApplicationClass::Display2X (void) //for OpenGL 2.X Applications
 void ApplicationClass::InitAppSystem(void)
 {
 	//m_bForceNewConfig = true;
-
 	m_pSystem->WindowWidth = 1280;
 	m_pSystem->WindowHeight = 720;
 	m_pSystem->WindowName = "Box Collisions";
@@ -374,30 +367,17 @@ void ApplicationClass::InitAppSystem(void)
 	m_pSystem->WindowFullscreen = false;
 	m_pSystem->WindowBorderless = false;
 }
-void ApplicationClass::InitAppVariables()
-{
-
-	m_bArcBall = false;
-
-	CreateAxisFrame();
-
-	m_pBSMngr = BoundingSphereManager::GetInstance();
-	m_pBBMngr = BoundingBoxManager::GetInstance();
-
-	m_pModelManager->LoadModel("MC_Steve.obj", "Steve", glm::translate(matrix4(1.0f), vector3(0.0f,0.0f,0.0f)));
-	m_pModelManager->LoadModel("MC_Cow.obj", "Cow", glm::translate(matrix4(1.0f), vector3(-4.0f,0.0f,0.0f)));
-	m_pModelManager->LoadModel("MC_Pig.obj", "Pig", glm::translate(matrix4(1.0f), vector3(-2.0f,0.0f,0.0f)));
-	m_pModelManager->LoadModel("MC_Creeper.obj", "Creeper", glm::translate(matrix4(1.0f), vector3(2.0f,0.0f,0.0f)));
-	m_pModelManager->LoadModel("MC_Zombie.obj", "Zombie", glm::translate(matrix4(1.0f), vector3(4.0f,0.0f,0.0f)));
-}
 void ApplicationClass::InitAppInternalVariables()
 {
 	if(m_pSystem->m_RenderingContext != OPENGL3X)
 		exit(0);
 
+	LineManagerClass* pLineMngr = LineManagerClass::GetInstance();
+
+	m_bArcBall = false;
 	m_bFPC = false;
 
-	m_pCamera0->SetPosition(vector3( 0.0f, 2.0f, 7.0f ));
+	m_pCamera0->SetPosition(vector3( 0.0f, 3.5f, 10.0f ));
 	
 	m_pLightMngr->SetPosition( glm::vec3( 0, 0, 10) );
 	m_pLightMngr->SetColor( glm::vec3( 1, 1, 1) );
@@ -405,27 +385,20 @@ void ApplicationClass::InitAppInternalVariables()
 	m_pLightMngr->SetIntensity ( 0.75f, 0 ); //Ambient light (Ambient Light is always the first light, or light[0])
 
 	m_sSelectedObject = "None";
-}
 
-void ApplicationClass::CreateAxisFrame(void)
-{
-	LineManagerClass* pLineMngr = LineManagerClass::GetInstance();
-	pLineMngr->AddLine(vector3(-100.0f,   0.0f,   0.0f), vector3( 100.0f,   0.0f,   0.0f), MERED);
-	pLineMngr->AddLine(vector3(   0.0f,-100.0f,   0.0f), vector3(   0.0f, 100.0f,   0.0f), MEGREEN);
-	pLineMngr->AddLine(vector3(   0.0f,   0.0f,-100.0f), vector3(   0.0f,   0.0f, 100.0f), MEBLUE);
-}
+	pGrid = new GridClass(MEAXIS::XY);
+	pGrid->CompileGrid();
 
+	m_pLightBulb = new PrimitiveClass();
+	m_pLightBulb->GenerateSphere(0.1f, 3, m_pLightMngr->GetLight(1).GetColor());
+}
 void ApplicationClass::Release()
 {
 	m_pLightMngr->ReleaseInstance();
 	
 	LineManagerClass* pLineMngr = LineManagerClass::GetInstance();
 	pLineMngr->ReleaseInstance();
-
-	BoxManagerClass* pBoxMngr = BoxManagerClass::GetInstance();
-	pBoxMngr->ReleaseInstance();
 }
-
 void ApplicationClass::Idle (void)
 {
 	m_bFPC = true;

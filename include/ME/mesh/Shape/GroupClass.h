@@ -9,9 +9,8 @@ Date: 2014/05
 #include "ME\materials\MaterialManagerClass.h"
 #include "ME\mesh\Animation\FrameClass.h"
 #include "ME\mesh\Animation\AnimationClass.h"
-#include "ME\mesh\Debug\AxisReferenceClass.h"
-#include "ME\mesh\Physics\AABBClass.h"
-#include "ME\mesh\Debug\BoxManagerClass.h"
+#include "mesh\physics\BoundingObjectClass.h"
+#include "mesh\debug\AxisClass.h"
 
 namespace MyEngine
 {
@@ -22,8 +21,6 @@ class MyEngineDLL GroupClass
 	MaterialManagerClass* m_pMaterialManager;
 	GroupClass* m_pParent;
 	FrameClass* m_pFrame;
-	AxisReferenceClass* m_pAxis;
-	AABBClass* m_pAABB;
 
 	int m_nShapes;
 	int m_nHP;
@@ -37,15 +34,13 @@ class MyEngineDLL GroupClass
 	String m_sName;
 	String m_sParent;
 	vector3 m_v3Pivot;
-	vector3 m_v3Max;
-	vector3 m_v3Min;
+
 	matrix4 m_mToWorld;
 	std::vector<ShapeClass> m_vShape;
-	std::vector<String> m_vCollidingNames; //Tell with what other groups this group is colliding
 
-	bool m_bOBB;
-	AABBClass* m_pOBB;
-		
+	BoundingObjectClass* m_pBoundingObject;
+	AxisClass* m_pAxis;
+
 public:
 	GroupClass(void);
 	GroupClass(const GroupClass& other);
@@ -53,7 +48,6 @@ public:
 	~GroupClass(void);
 	
 	void Release(void);
-	void ReleaseBoxes(void);
 
 	void Swap(GroupClass& other);
 
@@ -72,7 +66,9 @@ public:
 
 	bool CloneFromGroup(const GroupClass& other);
 
-	void Render(int nFrame = 0, matrix4 a_mToWorld = matrix4(1.0f));//Render all shapes
+	void Render(int a_nFrame = 0);//Render all shapes
+	void RenderDebug(bool a_bForce = false);//Render all debug
+	void RenderAxis(bool a_bForce = false);//Render all debug
 
 	void ReleaseOpenGL(); //DeleteOpenGL
 
@@ -81,7 +77,7 @@ public:
 	void SwapMaterial( String sOldMaterialName, String sNewMaterialName);
 
 	void SetShaderProgram(String a_sVertexShaderName, String a_sFragmentShaderName, String a_sShaderName);
-	void SetShaderProgram(String a_sShaderName);
+	void SetShaderProgram(String a_sShaderName = "Original");
 
 	void SetMaterial(String a_sMaterialName);
 
@@ -126,37 +122,26 @@ public:
 	void SetVisible( bool bValue, int nFrame);
 	void SetKeyframe( bool bValue, int nFrame);
 	void SetDebug(bool a_bDebug);
+	void SetVisibleAxis(bool a_bVisible);
 
 	void ComputeMatrix(void);
 
 	void Interpolate(int a_nFrames);
 
-	AxisReferenceClass* GetAxis(void);
-	AABBClass* GetAABB(void);
-
-	vector3 GetMin(void);
-	vector3 GetMax(void);
-	vector3 GetGlobalMin(int a_nFrame);
-	vector3 GetGlobalMax(int a_nFrame);
-
-	void ComputeAABB(void);
-
-	void ClearColliderInfo(void);
-	void AddCollisionName(String a_sInstanceName, String a_sGroupName);
-	std::vector<String> GetCollisionNames(void);
-
 	glm::mat4& GetModelMatrix(void);
 
-	void ResetOBB(void);
-	void CalculateOBB(matrix4 a_mModelToWorld);
-	AABBClass* GetOBB(void);
 	matrix4 TranverseHierarchy(GroupClass* group, int nFrame = 0);
 
-	std::vector<vector3> GetVertices(int nShape = 0);
+	std::vector<vector3> GetVertices(int a_nShape = -1);
+
+	void Update(int a_nFrame, matrix4 a_mToWorld);
+
+	BoundingObjectClass* GetBoundingObject(void);
+	void CompileBoundingObject(void);
+
+	bool IsColliding( vector3 a_v3RayOrigin, vector3 a_v3RayDirection, float& a_fDistance );
 private:
 	void Init(void);
-	
-	void CalculateMaxAndMin(void);
 };
 
 EXPIMP_TEMPLATE template class MyEngineDLL std::vector<GroupClass>;

@@ -31,6 +31,7 @@ protected:
 	GLuint m_BinormalBuffer;	//OpenGL Buffer (will hold the Binormal Buffer)
 	
 	String m_sShaderProgramName;
+	String m_sOriginalShaderProgram;
 
 	String m_sName;
 
@@ -86,9 +87,11 @@ public:
 	void Swap(ShapeClass& other);
 	
 	//Renders the content of the shape
-	virtual void Render(GLenum mode = GL_TRIANGLE_FAN, matrix4 input = matrix4(1.0f));
+	virtual void Render(GLenum mode = GL_TRIANGLE_FAN, matrix4 a_mToWorld = matrix4(1.0f));
 	
 	virtual void Render( matrix4 a_mToWorld, vector3 a_vColor);
+
+	virtual void Render( matrix4 a_mToWorld);
 
 	//Adds a new point to the vector of vertices
 	void AddVertexPosition(vector3 input);
@@ -130,7 +133,7 @@ public:
 	void CalculateTangents(void);
 
 	void SetShaderProgram(String a_sVertexShaderName, String a_sFragmentShaderName, String a_sShaderName);//Set the shader to the newly load shader
-	void SetShaderProgram(String a_sShaderName);//Sets the shader of the Shape to a loaded shader
+	void SetShaderProgram(String a_sShaderName = "Original");//Sets the shader of the Shape to a loaded shader
 
 	void SetPivot(vector3 a_v3Pivot);
 

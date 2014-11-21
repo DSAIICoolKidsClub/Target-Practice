@@ -169,7 +169,7 @@ void BoundingBoxClass::SetModelMatrix(matrix4 a_mModelMatrix)
 	vector3 v3Size = vector3(fSizeX, fSizeY, fSizeZ);
 	m_pOBB->SetModelMatrix(glm::translate(m_mModelToWorld, m_v3CentroidOBB) * glm::scale(matrix4(1.0f), v3Size));
 
-	CalculateAABB();
+	CalculateAABB(); //Leaving them in global coordinates
 	fSizeX = glm::distance(vector3(m_v3MinAABB.x, 0.0f, 0.0f), vector3(m_v3MaxAABB.x, 0.0f, 0.0f));
 	fSizeY = glm::distance(vector3(0.0f, m_v3MinAABB.y, 0.0f), vector3(0.0f, m_v3MaxAABB.y, 0.0f));
 	fSizeZ = glm::distance(vector3(0.0f, 0.0f, m_v3MinAABB.z), vector3(0.0f, 0.0f, m_v3MaxAABB.z));

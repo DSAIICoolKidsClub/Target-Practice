@@ -7,8 +7,6 @@ Date: 2014/10
 #pragma warning(disable:4251)
 
 #include "ME\MyEngine.h"
-#include "BoundingSphereManager.h"
-#include "BoundingBoxManager.h"
 
 #include <SFML\Graphics.hpp>
 #include <chrono>
@@ -17,20 +15,27 @@ using namespace MyEngine;
 
 class ApplicationClass
 {
-public: //This Application
-	//Public for main to use
+public:
 	static ApplicationClass* GetInstance( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow);//Singleton accessor 
 	void ReleaseInstance();	//Singleton Destructor
 	void Run (void); //Main Loop
 
-protected://General
+private:
+	static ApplicationClass* m_pInstance;
+	SystemClass* m_pSystem;
+	GLSystemClass* m_pGLSystem;
+	WindowClass* m_pWindow;
+	ModelManagerClass* m_pModelMngr;
+	LightManagerClass* m_pLightMngr;
+	MaterialManagerClass* pMatMngr;
+	GridClass* pGrid;
+	PrimitiveClass* m_pLightBulb;
+
 	bool m_bFPC;
 	String m_sSelectedObject;
 	bool m_bArcBall;
-	
-	BoundingSphereManager* m_pBSMngr;
-	
-	BoundingBoxManager* m_pBBMngr;
+	CameraClass* m_pCamera0;
+	bool m_bForceNewConfig;
 
 	void Update (void);
 	void Display2X (void);
@@ -38,26 +43,14 @@ protected://General
 	void DisplayDX (void);
 	void Idle (void);
 	void Reshape(int a_nWidth, int a_nHeight);
+	
 	void InitAppSystem(void);
 	void InitAppInternalVariables(void);
 	void InitAppVariables(void);
+
 	void ProcessKeyboard(void);
 	void ProcessMouse(void);
-	void CreateAxisFrame(void);
 	void ProcessJoystick(void);
-
-
-private://General
-	static ApplicationClass* m_pInstance;
-	SystemClass* m_pSystem;
-	GLSystemClass* m_pGLSystem;
-	WindowClass* m_pWindow;
-	ModelManagerClass* m_pModelManager;
-	LightManagerClass* m_pLightMngr;
-	MaterialManagerClass* pMatMngr;
-
-	CameraClass* m_pCamera0;
-	bool m_bForceNewConfig;
 	
 	void Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow);
 	void Release(void);
