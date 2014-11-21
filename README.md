@@ -1,4 +1,6 @@
 Target-Practice
 ===============
-We meet every Thursday after class at 11:00 AM and on the weekends.
-for GSA II
+We meet every Friday between 5 and 8 PM, and any other time deemed necessary.
+for DSA II
+
+CURRENT MILESTONE: Milestone 2
