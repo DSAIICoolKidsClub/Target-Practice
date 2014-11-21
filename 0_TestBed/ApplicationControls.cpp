@@ -328,25 +328,27 @@ void ApplicationClass::CameraRotation(float a_fSpeed)
 	if(MouseX < CenterX)
 	{
 		DeltaMouse = static_cast<float>(CenterX - MouseX);
-		fAngleY += DeltaMouse * a_fSpeed;
+		fAngleY += DeltaMouse * 0.05 * a_fSpeed;
 	}
 	else if(MouseX > CenterX)
 	{
 		DeltaMouse = static_cast<float>(MouseX - CenterX);
-		fAngleY -= DeltaMouse * a_fSpeed;
+		fAngleY -= DeltaMouse * 0.05 * a_fSpeed;
 	}
 
 	if(MouseY < CenterY)
 	{
 		DeltaMouse = static_cast<float>(CenterY - MouseY);
-		fAngleX -= DeltaMouse * a_fSpeed;
+		fAngleX -= DeltaMouse * 0.05 * a_fSpeed;
 	}
 	else if(MouseY > CenterY)
 	{
 		DeltaMouse = static_cast<float>(MouseY - CenterY);
-		fAngleX += DeltaMouse * a_fSpeed;
+		fAngleX += DeltaMouse * 0.05 * a_fSpeed;
 	}
 	m_pCamera0->Rotate(fAngleX, fAngleY);
+	
+	SetCursorPos(MouseX, MouseY);
 }
 void ApplicationClass::ArcBall(float a_fSensitivity)
 {
