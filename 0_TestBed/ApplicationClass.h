@@ -21,6 +21,8 @@ public:
 	void Run (void); //Main Loop
 
 private:
+	bool canFire;
+
 	static ApplicationClass* m_pInstance;
 	SystemClass* m_pSystem;
 	GLSystemClass* m_pGLSystem;

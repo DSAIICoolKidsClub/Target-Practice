@@ -1,6 +1,7 @@
 #include "ApplicationClass.h"
 void ApplicationClass::InitAppVariables()
 {
+	canFire = true;
 	float fSpace = 4.0f;
 	for(int n = 0 ; n < 2; n++)
 	{
