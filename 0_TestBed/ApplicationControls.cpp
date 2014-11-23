@@ -199,6 +199,21 @@ void ApplicationClass::ProcessKeyboard(void)
 #pragma endregion
 	//Camera
 #pragma region Camera
+	if (m_pCamera0->GetPosition().y != 2.5)
+		m_pCamera0->SetPosition(vector3(m_pCamera0->GetPosition().x,2.5,m_pCamera0->GetPosition().z));
+
+	if (m_pCamera0->GetPosition().x > 10)
+		m_pCamera0->SetPosition(vector3(10,m_pCamera0->GetPosition().y,m_pCamera0->GetPosition().z));
+
+	if (m_pCamera0->GetPosition().x < -10)
+		m_pCamera0->SetPosition(vector3(-10,m_pCamera0->GetPosition().y,m_pCamera0->GetPosition().z));
+
+	if (m_pCamera0->GetPosition().z > 10)
+		m_pCamera0->SetPosition(vector3(m_pCamera0->GetPosition().x,m_pCamera0->GetPosition().y,10));
+
+	if (m_pCamera0->GetPosition().z < -10)
+		m_pCamera0->SetPosition(vector3(m_pCamera0->GetPosition().x,m_pCamera0->GetPosition().y,-10));
+
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCamera0->MoveForward(fSpeed);
 
@@ -346,6 +361,14 @@ void ApplicationClass::CameraRotation(float a_fSpeed)
 		DeltaMouse = static_cast<float>(MouseY - CenterY);
 		fAngleX += DeltaMouse * 0.05 * a_fSpeed;
 	}
+
+	//std::cout << fAngleX << std::endl;
+	if (fAngleX < -1.5)
+		fAngleX = -1.5;
+
+	if (fAngleX > 1.0)
+		fAngleX = 1.0;
+
 	m_pCamera0->Rotate(fAngleX, fAngleY);
 	
 	SetCursorPos(MouseX, MouseY);

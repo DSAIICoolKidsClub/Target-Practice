@@ -56,8 +56,6 @@ void ApplicationClass::Update (void)
 		m_pModelMngr->SetShaderProgramByNumber(static_cast<int>(entry.x),static_cast<int>(entry.y), "GrayScale");
 	}
 
-	
-
 
 	printf("FPS: %d \r", m_pSystem->FPS);//print the Frames per Second
 }
