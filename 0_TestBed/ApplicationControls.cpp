@@ -340,25 +340,25 @@ void ApplicationClass::CameraRotation(float a_fSpeed)
 	static float fAngleX = 0.0f;
 	static float fAngleY = 0.0f;
 
-	if(MouseX < CenterX)
+	if(MouseX < CenterX && (CenterX - MouseX) > 25)
 	{
-		DeltaMouse = static_cast<float>(CenterX - MouseX);
+		DeltaMouse = static_cast<float>(CenterX - MouseX - 25);
 		fAngleY += DeltaMouse * 0.05 * a_fSpeed;
 	}
-	else if(MouseX > CenterX)
+	else if(MouseX > CenterX  && (MouseX - CenterX) > 25)
 	{
-		DeltaMouse = static_cast<float>(MouseX - CenterX);
+		DeltaMouse = static_cast<float>(MouseX - CenterX - 25);
 		fAngleY -= DeltaMouse * 0.05 * a_fSpeed;
 	}
 
-	if(MouseY < CenterY)
+	if(MouseY < CenterY && (CenterY - MouseY) > 25)
 	{
-		DeltaMouse = static_cast<float>(CenterY - MouseY);
+		DeltaMouse = static_cast<float>(CenterY - MouseY - 25);
 		fAngleX -= DeltaMouse * 0.05 * a_fSpeed;
 	}
-	else if(MouseY > CenterY)
+	else if(MouseY > CenterY && (MouseY - CenterY) > 25)
 	{
-		DeltaMouse = static_cast<float>(MouseY - CenterY);
+		DeltaMouse = static_cast<float>(MouseY - CenterY - 25);
 		fAngleX += DeltaMouse * 0.05 * a_fSpeed;
 	}
 
