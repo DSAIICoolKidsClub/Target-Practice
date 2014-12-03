@@ -22,6 +22,9 @@ public:
 
 private:
 	bool canFire;
+	float timer;
+	float lastTime;
+	float timeChange;
 
 	static ApplicationClass* m_pInstance;
 	SystemClass* m_pSystem;
