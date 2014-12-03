@@ -2,6 +2,7 @@
 void ApplicationClass::InitAppVariables()
 {
 	canFire = true;
+	lastTime = 0;
 	float fSpace = 4.0f;
 	for(int n = 0 ; n < 2; n++)
 	{
@@ -13,7 +14,14 @@ void ApplicationClass::InitAppVariables()
 void ApplicationClass::Update (void)
 {
 	m_pSystem->UpdateTime(); //Update the system
+	timer = GetCurrentTime();
 
+	timeChange = timer - lastTime;
+	if(timeChange >= 2000.0f && canFire == false)
+	{
+		canFire = true;
+	}
+	
 	static bool bObjectSelected = false;
 	if(!bObjectSelected)
 	{
