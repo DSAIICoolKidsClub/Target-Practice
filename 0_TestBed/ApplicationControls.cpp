@@ -87,10 +87,12 @@ void ApplicationClass::ProcessKeyboard(void)
 		
 		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canFire == true)
 	{
 		m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()), 1, 1, 0);
 		//m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
+		canFire = false;
+		lastTime = timer;
 	}
 #pragma endregion
 	//Model Loading
