@@ -35,6 +35,12 @@ private:
 	MaterialManagerClass* pMatMngr;
 	GridClass* pGrid;
 	PrimitiveClass* m_pLightBulb;
+	//std::vector<PrimitiveClass> environment;
+	PrimitiveClass* ground;
+	PrimitiveClass* wall1;
+	PrimitiveClass* wall2;
+	PrimitiveClass* wall3;
+	PrimitiveClass* wall4;
 
 	bool m_bFPC;
 	String m_sSelectedObject;

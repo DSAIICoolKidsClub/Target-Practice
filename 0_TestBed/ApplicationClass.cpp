@@ -46,7 +46,9 @@ ApplicationClass::~ApplicationClass()
 };
 void ApplicationClass::ReleaseInstance()
 {
-	//SafeDelete(m_pLightBulb);
+	SafeDelete(m_pLightBulb);
+	SafeDelete(ground);
+	SafeDelete(wall1);
 
 	if(pGrid != nullptr)
 	{
@@ -390,6 +392,11 @@ void ApplicationClass::InitAppInternalVariables()
 	pGrid->CompileGrid();
 
 	m_pLightBulb = new PrimitiveClass();
+	ground = new PrimitiveClass();
+	wall1 = new PrimitiveClass();
+	wall2 = new PrimitiveClass();
+	wall3 = new PrimitiveClass();
+	wall4 = new PrimitiveClass();
 	m_pLightBulb->GenerateSphere(0.1f, 3, m_pLightMngr->GetLight(1).GetColor());
 }
 void ApplicationClass::Release()

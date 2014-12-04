@@ -10,6 +10,16 @@ void ApplicationClass::InitAppVariables()
 	}
 
 	m_pModelMngr->LoadModel("AnimatedCubes.obj", "Cubos", glm::translate(matrix4(1.0f), vector3(fSpace * -1, 0.0f, 0.0f)), 0, 1, 0);
+	ground->GenerateCube(1, MEBROWN);
+	ground->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,-.5,0)) * glm::scale(vector3(21,1,21)));
+	wall1->GenerateCube(1, MEGREEN);
+	wall1->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(10.5,.25,0)) * glm::scale(vector3(.5,2,21)));
+	wall2->GenerateCube(1, MEBLUE);
+	wall2->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(-10.5,.25,0)) * glm::scale(vector3(.5,2,21)));
+	wall3->GenerateCube(1, MERED);
+	wall3->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,10.5)) * glm::scale(vector3(21,2,.5)));
+	wall4->GenerateCube(1, MECYAN);
+	wall4->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,-10.5)) * glm::scale(vector3(21,2,.5)));
 }
 void ApplicationClass::Update (void)
 {
@@ -78,6 +88,13 @@ void ApplicationClass::Display3X (void) //for OpenGL 3.X Applications
 	m_pModelMngr->RenderInstance();
 
 	m_pLightBulb->Render(GL_TRIANGLES);
+
+	ground->Render(GL_TRIANGLES);
+
+	wall1->Render(GL_TRIANGLES);
+	wall2->Render(GL_TRIANGLES);
+	wall3->Render(GL_TRIANGLES);
+	wall4->Render(GL_TRIANGLES);
 
 	m_pGLSystem->GLSwapBuffers();
 }
