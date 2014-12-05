@@ -89,13 +89,71 @@ void ApplicationClass::ProcessKeyboard(void)
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canFire == true)
 	{
-		vector3 camPos = m_pCamera0->GetPosition();
-		vector3 camFace = m_pCamera0->GetViewVector();
+		/* vector3 camPos = vector3(m_pCamera0->GetUpVector().x * 180.0 / PI, m_pCamera0->GetUpVector().y * 180.0 / PI, m_pCamera0->GetUpVector().z * 180.0 / PI);
+		vector3 camFace = vector3(m_pCamera0->GetViewVector().x * 180/PI, 0, m_pCamera0->GetViewVector().z * 180/PI);
+		//std::cout << camFace.x << std::endl;
+		//std::cout << camFace.y << std::endl;
+		//std::cout << camFace.z << std::endl;
 		float dotProd = glm::dot(camPos, camFace);
 		dotProd /= (glm::length(camPos) * glm::length(camFace));
-		float aCos = acos(dotProd) * 2;
+		float aCos = acos(dotProd);
+		float angle = aCos*180/PI; */
+		matrix4 mat = m_pCamera0->GetMVP();
+		vector3 bla = m_pCamera0->GetViewVector();
+		vector3 center = static_cast<vector3>(glm::translate(mat,bla) * vector4(0.0f,0.0f,0.0f, 1.0f));
+		vector3 lookat =  m_pCamera0->GetViewVector() - m_pCamera0->GetPosition();
+		vector3 v = lookat - m_pCamera0->GetUpVector();
+		double length = v.length();
+
+		double pitch = asin(v.y / length);
+		double yaw;
+		
+		if(abs(v.z) < .00001)
+		{
+			if(v.x > 0)
+			{
+				yaw = PI/2.0;
+			}
+			else if(v.x < 0)
+			{
+				yaw = -PI/2.0;
+			}
+			else
+			{
+				yaw = 0.0;
+			}
+		}
+		else
+		{
+			yaw = atan2(v.x,v.z);
+		}
+
+		
+			pitch * 180.0/ -PI;
+			yaw * 180.0 / PI;
+		
+
+		vector3 temp; 
+		temp.x = sin(pitch) * cos(yaw);
+		temp.y = sin(pitch)*sin(yaw);
+		temp.z = cos(pitch);
+
+		std::cout << temp.x << std::endl;
+		std::cout << temp.y << std::endl;
+		std::cout << temp.z << std::endl;
+
+		vector3 pos = m_pCamera0->GetPosition();
+		//vector3 camPos = vector3(m_pCamera0->GetUpVector().x * 180.0 / PI, m_pCamera0->GetUpVector().y * 180.0 / PI, m_pCamera0->GetUpVector().z * 180.0 / PI);
+		//vector3 camFace = vector3(m_pCamera0->GetViewVector().x * 180/PI, 0, m_pCamera0->GetViewVector().z * 180/PI);
+		//std::cout << camFace.x << std::endl;
+		//std::cout << camFace.y << std::endl;
+		//std::cout << camFace.z << std::endl;
+		float dotProd = glm::dot(pos, temp);
+		dotProd /= (glm::length(pos) * glm::length(temp));
+		float aCos = acos(dotProd);
 		float angle = aCos*180/PI;
-		std::cout << angle << std::endl;
+
+		//std::cout << angle << std::endl;
 		matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()) * glm::rotate(matrix4(1.0f), angle, 0.0f, 1.0f, 0.0f);
 		m_pModelMngr->LoadModel("Bullet.obj", "Bullet",finalMat, 1, 1, 0);
 		canFire = false;
