@@ -89,9 +89,15 @@ void ApplicationClass::ProcessKeyboard(void)
 	}
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canFire == true)
 	{
-		m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()), 1, 1, 0);
-		/*matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix("Bullet");
-		m_pModelMngr->SetModelMatrix(matrix, "Bullet");*/
+		vector3 camPos = m_pCamera0->GetPosition();
+		vector3 camFace = m_pCamera0->GetViewVector();
+		float dotProd = glm::dot(camPos, camFace);
+		dotProd /= (glm::length(camPos) * glm::length(camFace));
+		float aCos = acos(dotProd) * 2;
+		float angle = aCos*180/PI;
+		std::cout << angle << std::endl;
+		matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()) * glm::rotate(matrix4(1.0f), angle, 0.0f, 1.0f, 0.0f);
+		m_pModelMngr->LoadModel("Bullet.obj", "Bullet",finalMat, 1, 1, 0);
 		canFire = false;
 		lastTime = timer;
 	}

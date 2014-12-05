@@ -39,9 +39,8 @@ void ApplicationClass::Update (void)
 
 	float progress = difference * 1.0f / 2000.0f;
 
-	if(progress > 1.0f)
+	if(progress > 5.0f)
 	{
-		progress = 0.0f;
 		mlastTime = currentTime;
 	}
 
