@@ -98,7 +98,59 @@ void ApplicationClass::ProcessKeyboard(void)
 		dotProd /= (glm::length(camPos) * glm::length(camFace));
 		float aCos = acos(dotProd);
 		float angle = aCos*180/PI; */
-		matrix4 mat = m_pCamera0->GetMVP();
+
+
+		static matrix4 arcball = matrix4(1.0);
+	UINT	MouseX, MouseY;		// Coordinates for the mouse
+	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
+
+	CenterX = m_pSystem->WindowX + m_pSystem->WindowWidth / 2;
+	CenterY = m_pSystem->WindowY + m_pSystem->WindowHeight / 2;
+	
+	float DeltaMouse;
+	POINT pt;
+
+	GetCursorPos(&pt);
+	
+	MouseX = pt.x;
+	MouseY = pt.y;
+
+	SetCursorPos(CenterX, CenterY);
+
+	static float fVerticalAngle = 0.0f;
+	static float fHorizontalAngle = 0.0f;
+
+	float fSpeed = 0.001f;
+
+	if(MouseX < CenterX && (CenterX - MouseX) > 25)
+	{
+		DeltaMouse = static_cast<float>(CenterX - MouseX - 25);
+		arcball = glm::rotate(arcball,  DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
+	}
+	else if(MouseX > CenterX  && (MouseX - CenterX) > 25)
+	{
+		DeltaMouse = static_cast<float>(MouseX - CenterX -25);
+		arcball = glm::rotate(arcball, DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
+	}
+
+	if(MouseY < CenterY && (CenterY - MouseY) > 25)
+	{
+		DeltaMouse = static_cast<float>(CenterY - MouseY);
+		arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
+	}
+	else if(MouseY > CenterY && (MouseY - CenterY) > 25)
+	{
+		DeltaMouse = static_cast<float>(MouseY - CenterY -25);
+		arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
+	}
+
+	//m_pCamera0->Rotate(fVerticalAngle, fHorizontalAngle);
+	//m_pModelMngr->SetModelMatrix(arcball, m_sSelectedObject);
+
+
+
+
+		/*matrix4 mat = m_pCamera0->GetMVP();
 		vector3 bla = m_pCamera0->GetViewVector();
 		vector3 center = static_cast<vector3>(glm::translate(mat,bla) * vector4(0.0f,0.0f,0.0f, 1.0f));
 		vector3 lookat =  m_pCamera0->GetViewVector() - m_pCamera0->GetPosition();
@@ -140,9 +192,9 @@ void ApplicationClass::ProcessKeyboard(void)
 
 		std::cout << temp.x << std::endl;
 		std::cout << temp.y << std::endl;
-		std::cout << temp.z << std::endl;
+		std::cout << temp.z << std::endl;*/
 
-		vector3 pos = m_pCamera0->GetPosition();
+		/*vector3 pos = m_pCamera0->GetPosition();
 		//vector3 camPos = vector3(m_pCamera0->GetUpVector().x * 180.0 / PI, m_pCamera0->GetUpVector().y * 180.0 / PI, m_pCamera0->GetUpVector().z * 180.0 / PI);
 		//vector3 camFace = vector3(m_pCamera0->GetViewVector().x * 180/PI, 0, m_pCamera0->GetViewVector().z * 180/PI);
 		//std::cout << camFace.x << std::endl;
@@ -151,11 +203,21 @@ void ApplicationClass::ProcessKeyboard(void)
 		float dotProd = glm::dot(pos, temp);
 		dotProd /= (glm::length(pos) * glm::length(temp));
 		float aCos = acos(dotProd);
-		float angle = aCos*180/PI;
+		float angle = aCos*180/PI;*/
 
 		//std::cout << angle << std::endl;
-		matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()) * glm::rotate(matrix4(1.0f), angle, 0.0f, 1.0f, 0.0f);
+		matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition());
 		m_pModelMngr->LoadModel("Bullet.obj", "Bullet",finalMat, 1, 1, 0);
+		int size = static_cast<int>(bullets.size());
+		for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
+		{
+			String temp = m_pModelMngr->GetInstanceName(i);
+			//const char* temmp = temp[0];
+			if (temp[0] == 'B')
+			{
+				m_pModelMngr->SetModelMatrix(arcball, m_pModelMngr->GetInstanceName(i));
+			}
+		}
 		canFire = false;
 		lastTime = timer;
 	}

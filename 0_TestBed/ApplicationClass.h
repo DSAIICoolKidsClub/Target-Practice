@@ -25,6 +25,8 @@ private:
 	float timer;
 	float lastTime;
 	float timeChange;
+	float targltime;
+	float targtimechange;
 
 	vector3 movement;
 	bool isFired;

@@ -1,6 +1,7 @@
 #include "ApplicationClass.h"
 void ApplicationClass::InitAppVariables()
 {
+	srand(time(0));
 	canFire = true;
 	lastTime = 0;
 	float fSpace = 4.0f;
@@ -66,6 +67,21 @@ void ApplicationClass::Update (void)
 			}
 		}
 	}
+
+	float targetx = rand() % 10  - 5;
+	float targetz = rand() %10  - 5;
+	vector3 tarpos;
+	targtimechange = timer - targltime;
+
+	if(targtimechange >= 1000)
+	{
+		tarpos = vector3(targetx, 3.0f, targetz);
+		m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), tarpos), 1, 1, 0);
+		targltime = timer;
+		//std::cout << "whatus up";
+	}
+
+
 	static bool bObjectSelected = false;
 	if(!bObjectSelected)
 	{
