@@ -90,7 +90,8 @@ void ApplicationClass::ProcessKeyboard(void)
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canFire == true)
 	{
 		m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()), 1, 1, 0);
-		//m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
+		/*matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix("Bullet");
+		m_pModelMngr->SetModelMatrix(matrix, "Bullet");*/
 		canFire = false;
 		lastTime = timer;
 	}

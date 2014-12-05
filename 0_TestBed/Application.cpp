@@ -27,11 +27,46 @@ void ApplicationClass::Update (void)
 	timer = GetCurrentTime();
 
 	timeChange = timer - lastTime;
-	if(timeChange >= 2000.0f && canFire == false)
+	if(timeChange >= 250.0f && canFire == false)
 	{
 		canFire = true;
 	}
+
+	static DWORD currentTime = 0;
+	static DWORD mlastTime = 0;
+	currentTime = GetTickCount();
+	DWORD difference = currentTime - mlastTime;
+
+	float progress = difference * 1.0f / 2000.0f;
+
+	if(progress > 1.0f)
+	{
+		progress = 0.0f;
+		mlastTime = currentTime;
+	}
+
+	std::cout << "prog : " << progress;
+
+	movement = vector3(0.0f, 0.0f, -1.0f);
+	movement *= progress;
+
 	
+	if(true)
+	{
+		matrix4 matrix;
+	
+		int size = static_cast<int>(bullets.size());
+		for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
+		{
+			String temp = m_pModelMngr->GetInstanceName(i);
+			//const char* temmp = temp[0];
+			if (temp[0] == 'B')
+			{
+				matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix(m_pModelMngr->GetInstanceName(i));
+				m_pModelMngr->SetModelMatrix(matrix, m_pModelMngr->GetInstanceName(i));
+			}
+		}
+	}
 	static bool bObjectSelected = false;
 	if(!bObjectSelected)
 	{

@@ -26,6 +26,10 @@ private:
 	float lastTime;
 	float timeChange;
 
+	vector3 movement;
+	bool isFired;
+	std::vector<int> bullets;
+
 	static ApplicationClass* m_pInstance;
 	SystemClass* m_pSystem;
 	GLSystemClass* m_pGLSystem;
