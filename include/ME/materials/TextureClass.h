@@ -4,7 +4,7 @@ Created by Alberto Bobadilla (labigm@rit.edu) in 2013
 #ifndef __TEXTURECLASS_H_
 #define __TEXTURECLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 #include "SOIL\SOIL.h"
 
 namespace MyEngine
@@ -12,8 +12,8 @@ namespace MyEngine
 
 class MyEngineDLL TextureClass
 {
-	SystemClass* m_pSystem;
 	GLuint m_nGLTextureID;
+	SystemSingleton* m_pSystem;
 	String m_sName;
 	String m_sFileName;
 public:

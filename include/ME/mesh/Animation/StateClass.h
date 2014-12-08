@@ -5,7 +5,7 @@ Date: 2014/06
 #ifndef __STATECLASS_H_
 #define __STATECLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 #include <vector>
 
 namespace MyEngine
@@ -13,14 +13,15 @@ namespace MyEngine
 
 class MyEngineDLL StateClass
 {
-	String m_sName;
-	int m_nSequence;		//Sequence being played
-	int m_nExits;
-	bool m_bTransitionState;
-	bool m_bRepeatSequence;	//marks
-	std::vector<StateClass*> m_vpExit;
 	
-	void Swap(StateClass& other);
+	bool m_bTransitionState;//Is this a transition state
+	bool m_bRepeatSequence;	//Does the sequence repeats
+	int m_nSequence;		//Sequence being played
+	int m_nExits;			//Number of exits of this state
+	
+	std::vector<StateClass*> m_vExit;//Exits of the state
+
+	String m_sName;
 public:
 	StateClass();	//Constructor
 	StateClass( String a_sName, int a_nSequence = 0, bool a_bTransitionState = false, bool a_bRepeatSequence = false);
@@ -55,6 +56,9 @@ public:
 	StateClass* GetAutoExit(void);
 
 	StateClass* GetExit(int a_nIndex);
+
+private:
+	void Swap(StateClass& other);
 };
 
 EXPIMP_TEMPLATE template class MyEngineDLL std::vector<StateClass>;

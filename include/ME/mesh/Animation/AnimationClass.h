@@ -5,7 +5,7 @@ Date: 2014/05
 #ifndef __ANIMATIONCLASS_H_
 #define __ANIMATIONCLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 #include "ME\mesh\animation\FrameClass.h"
 
 namespace MyEngine

@@ -4,19 +4,19 @@ Created by Alberto Bobadilla (labigm@rit.edu) in 2014
 #ifndef __FRAMECLASS_H_
 #define __FRAMECLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 
 namespace MyEngine
 {
 
 class MyEngineDLL FrameClass
 {
-	matrix4 m_mFrame;
 	bool m_bKeyframe;
 	bool m_bVisible;
 	vector3 m_v3Translation;
 	vector3 m_v3Rotation;
 	vector3 m_v3Scale;
+	matrix4 m_m4Transformation;
 public:
 	
 	//Constructor
@@ -29,16 +29,16 @@ public:
 	//Destructor
 	~FrameClass(void);
 
-	matrix4 GetMatrix(void);
-	matrix4 ComputeMatrix(	vector3 a_v3Translation,
-							vector3 a_v3Pivot,
-							vector3 a_v3Rotation,
-							vector3 a_v3Scale,
-							bool a_bVisible,
-							bool a_bKeyFrame,
-							matrix4 a_mParent = matrix4(1.0f));
-	matrix4 ComputeMatrix(matrix4 a_mParent);
-	matrix4 ComputeMatrix(vector3 a_v3Pivot);
+	matrix4 GetTransformation(void);
+	matrix4 ComputeTransformation(	vector3 a_v3Translation,
+									vector3 a_v3Pivot,
+									vector3 a_v3Rotation,
+									vector3 a_v3Scale,
+									bool a_bVisible,
+									bool a_bKeyFrame,
+									matrix4 a_mParent = matrix4(1.0f));
+	matrix4 ComputeTransformation(matrix4 a_mParent);
+	matrix4 ComputeTransformation(vector3 a_v3Pivot);
 	
 	bool IsKeyframe(void);
 	void SetVisible(bool a_bVisible);

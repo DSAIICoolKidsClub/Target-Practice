@@ -13,20 +13,20 @@ class MyEngineDLL PolygonClass : public ShapeClass
 {
 	typedef ShapeClass super;
 public:
-	//Constructor
+	/* Constructor */
 	PolygonClass();
-	//Copy Constructor
+	/* Copy Constructor */
 	PolygonClass(const PolygonClass& other);
-	//Copy Assignment Operator
+	/* Copy Assignment Operator */
 	virtual PolygonClass& operator=(const PolygonClass& other);
 
-	//Destructor
+	/* Destructor */
 	~PolygonClass(void);
 
-	//Generates a shape
+	/* Generates a shape */
 	void GeneratePoligon(int a_nSides = 3, float a_fSize = 1.0f);
 	
-	//Renders the content of the shape
+	/* Renders the content of the shape */
 	virtual void Render(GLenum mode = GL_TRIANGLE_FAN);
 };
 

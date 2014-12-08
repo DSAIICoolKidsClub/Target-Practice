@@ -4,26 +4,28 @@ Created by Alberto Bobadilla (labigm@rit.edu) in 2013
 #ifndef __MATERIALCLASS_H_
 #define __MATERIALCLASS_H_
 
-#include "ME\system\SystemClass.h"
-#include "ME\materials\TextureManagerClass.h"
+#include "ME\system\SystemSingleton.h"
+#include "ME\materials\TextureManagerSingleton.h"
 
 namespace MyEngine
 {
 
 class MyEngineDLL MaterialClass
 {
-	String m_sName;
+	SystemSingleton* m_pSystem;
+	TextureManagerSingleton* m_pTextureMngr;
+
 	GLuint m_nMapDiffuse;
 	GLuint m_nMapNormal;
-	String m_sMapDiffuse;
-	String m_sMapNormal;
 	GLuint m_nMapSpecular;
-	String m_sMapSpecular;
 
 	vector3 m_vKd;
 
-	SystemClass* m_pSystem;
-	TextureManagerClass* m_pTextureManager;
+	String m_sName;
+	String m_sMapDiffuse;
+	String m_sMapNormal;
+	String m_sMapSpecular;
+	
 public:
 	MaterialClass(String a_sName);
 	MaterialClass(const MaterialClass& other);

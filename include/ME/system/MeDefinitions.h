@@ -5,10 +5,20 @@ Date: 2014/05
 #ifndef __MEDEFINITIONS_H_
 #define __MEDEFINITIONS_H_
 
-#define SafeDelete(p){ if(p) { delete p; p = nullptr; } }
-
 namespace MyEngine
 {
+#define SafeDelete(p){ if(p) { delete p; p = nullptr; } }
+
+////https://stackoverflow.com/questions/10240161/reason-to-pass-a-pointer-by-reference-in-c/20188970#20188970
+//template<typename T>
+//void SafeDelete(T*& p)
+//{
+//	if(p != nullptr)
+//	{
+//		delete p;
+//		p = nullptr;
+//	} 
+//}
 //-----------------------------------------------------------------------------------------------------------
 // Enumerations
 //-----------------------------------------------------------------------------------------------------------

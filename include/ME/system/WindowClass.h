@@ -17,11 +17,32 @@ namespace MyEngine
 
 class MyEngineDLL WindowClass
 {
+	bool m_bFullscreen; //Run in fullscreen mode?
+	bool m_bBorderless; //Run with borders?
+	bool m_bWindowCrated; //Window has been created
+
+	int m_nWindowPosX; //Window position on screen (X)
+	int m_nWindowPosY; //Window position on screen (Y)
+	
+	int m_nWidth; //Window width
+	int m_nHeight; //Window height
+
+	int m_nCommandShow; //Number of arguments
+
+	LPCWSTR m_sWindowName; //Name of the window
+	HWND m_hWindowHandler; //Window handler
+
+	HINSTANCE m_hInstance; //Window Instance
+	WNDPROC m_Callback; //Associated Callback for this window
+	
 public:
 	/*
 	Constructor
 	*/
 	WindowClass(void);
+	/*
+	Constructor
+	*/
 	WindowClass(HINSTANCE hInstance, int nCmdShow, WNDPROC WndProc);
 
 	/*
@@ -77,24 +98,6 @@ public:
 	void CreateConsoleWindow(void);
 
 private:
-	bool m_bFullscreen; //Run in fullscreen mode?
-	bool m_bBorderless; //Run with borders?
-
-	int m_nWindowPosX; //Window position on screen (X)
-	int m_nWindowPosY; //Window position on screen (Y)
-	
-	int m_nWidth; //Window width
-	int m_nHeight; //Window height
-
-	bool m_bWindowCrated; //Window has been created
-
-	LPCWSTR m_sWindowName; //Name of the window
-	HWND m_hWindowHandler; //Window handler
-
-	HINSTANCE m_hInstance; //Window Instance
-	WNDPROC m_Callback; //Associated Callback for this window
-	int m_nCommandShow; //Number of arguments
-
 	/*
 	Copy Constructor
 	*/

@@ -24,24 +24,6 @@ void ApplicationClass::ProcessKeyboard(void)
 	}
 	
 #pragma endregion
-	//Light
-#pragma region Light
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
-	{
-		float fIntensity = m_pLightMngr->GetLight(0).Intensity;
-		fIntensity -= 0.01f;
-		if(fIntensity < 0)
-			fIntensity = 0;
-		m_pLightMngr->SetIntensity ( fIntensity, 0 );
-	}
-
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
-	{
-		float fIntensity = m_pLightMngr->GetLight(0).Intensity;
-		fIntensity += 0.01f;
-		m_pLightMngr->SetIntensity ( fIntensity, 0 );
-	}
-#pragma endregion
 	//Shaders
 #pragma region Shaders
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
@@ -101,51 +83,51 @@ void ApplicationClass::ProcessKeyboard(void)
 
 
 		static matrix4 arcball = matrix4(1.0);
-	UINT	MouseX, MouseY;		// Coordinates for the mouse
-	UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
+		UINT	MouseX, MouseY;		// Coordinates for the mouse
+		UINT	CenterX, CenterY;	// Coordinates for the center of the screen.
 
-	CenterX = m_pSystem->WindowX + m_pSystem->WindowWidth / 2;
-	CenterY = m_pSystem->WindowY + m_pSystem->WindowHeight / 2;
+		CenterX = m_pSystem->WindowX + m_pSystem->WindowWidth / 2;
+		CenterY = m_pSystem->WindowY + m_pSystem->WindowHeight / 2;
 	
-	float DeltaMouse;
-	POINT pt;
+		float DeltaMouse;
+		POINT pt;
 
-	GetCursorPos(&pt);
+		GetCursorPos(&pt);
 	
-	MouseX = pt.x;
-	MouseY = pt.y;
+		MouseX = pt.x;
+		MouseY = pt.y;
 
-	SetCursorPos(CenterX, CenterY);
+		SetCursorPos(CenterX, CenterY);
 
-	static float fVerticalAngle = 0.0f;
-	static float fHorizontalAngle = 0.0f;
+		static float fVerticalAngle = 0.0f;
+		static float fHorizontalAngle = 0.0f;
 
-	float fSpeed = 0.001f;
+		float fSpeed = 0.001f;
 
-	if(MouseX < CenterX && (CenterX - MouseX) > 25)
-	{
-		DeltaMouse = static_cast<float>(CenterX - MouseX - 25);
-		arcball = glm::rotate(arcball,  DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
-	}
-	else if(MouseX > CenterX  && (MouseX - CenterX) > 25)
-	{
-		DeltaMouse = static_cast<float>(MouseX - CenterX -25);
-		arcball = glm::rotate(arcball, DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
-	}
+		if(MouseX < CenterX && (CenterX - MouseX) > 25)
+		{
+			DeltaMouse = static_cast<float>(CenterX - MouseX - 25);
+			arcball = glm::rotate(arcball,  DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
+		}
+		else if(MouseX > CenterX  && (MouseX - CenterX) > 25)
+		{
+			DeltaMouse = static_cast<float>(MouseX - CenterX -25);
+			arcball = glm::rotate(arcball, DeltaMouse, vector3(0.0f, 1.0f, 0.0f));
+		}
 
-	if(MouseY < CenterY && (CenterY - MouseY) > 25)
-	{
-		DeltaMouse = static_cast<float>(CenterY - MouseY);
-		arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
-	}
-	else if(MouseY > CenterY && (MouseY - CenterY) > 25)
-	{
-		DeltaMouse = static_cast<float>(MouseY - CenterY -25);
-		arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
-	}
+		if(MouseY < CenterY && (CenterY - MouseY) > 25)
+		{
+			DeltaMouse = static_cast<float>(CenterY - MouseY);
+			arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
+		}
+		else if(MouseY > CenterY && (MouseY - CenterY) > 25)
+		{
+			DeltaMouse = static_cast<float>(MouseY - CenterY -25);
+			arcball = glm::rotate(arcball, DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
+		}
 
-	//m_pCamera0->Rotate(fVerticalAngle, fHorizontalAngle);
-	//m_pModelMngr->SetModelMatrix(arcball, m_sSelectedObject);
+		//m_pCamera0->Rotate(fVerticalAngle, fHorizontalAngle);
+		//m_pModelMngr->SetModelMatrix(arcball, m_sSelectedObject);
 
 
 
@@ -206,18 +188,24 @@ void ApplicationClass::ProcessKeyboard(void)
 		float angle = aCos*180/PI;*/
 
 		//std::cout << angle << std::endl;
-		matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition());
-		m_pModelMngr->LoadModel("Bullet.obj", "Bullet",finalMat, 1, 1, 0);
-		int size = static_cast<int>(bullets.size());
-		for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
-		{
-			String temp = m_pModelMngr->GetInstanceName(i);
-			//const char* temmp = temp[0];
-			if (temp[0] == 'B')
-			{
-				m_pModelMngr->SetModelMatrix(arcball, m_pModelMngr->GetInstanceName(i));
-			}
-		}
+		m_pModelMngr->SetModelMatrix(glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()), "Bullet");
+
+		m_v3BulletDirection = m_pCamera0->GetForwardVector();
+		m_v3BulletDirection = glm::normalize(m_v3BulletDirection);
+		m_v3BulletDirection *= 0.1f;
+
+		//matrix4 finalMat = glm::translate(matrix4(1.0f), m_pCamera0->GetPosition());
+		//
+		//int size = static_cast<int>(bullets.size());
+		//for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
+		//{
+		//	String temp = m_pModelMngr->GetInstanceName(i);
+		//	//const char* temmp = temp[0];
+		//	if (temp[0] == 'B')
+		//	{
+		//		m_pModelMngr->SetModelMatrix(arcball, m_pModelMngr->GetInstanceName(i));
+		//	}
+		//}
 		canFire = false;
 		lastTime = timer;
 	}
@@ -309,7 +297,7 @@ void ApplicationClass::ProcessKeyboard(void)
 	else if(bWasF5Pressed == true)//if its not currently pressed but it was pressed last...
 	{
 		bDebug = !bDebug;
-		m_pModelMngr->SetDebugByName(bDebug);
+		m_pModelMngr->SetVisibleGrandBoundingObjectByName(bDebug);
 		bWasF5Pressed = false;//reset the flag
 	}
 	
@@ -377,13 +365,13 @@ void ApplicationClass::ProcessMouse(void)
 	{
 		if(bLeft_Released == true)
 		{
-			m_pModelMngr->SetDebugByName(false);
+			m_pModelMngr->SetVisibleGrandBoundingObjectByName(false);
 			vector2 v2Intersection = m_pModelMngr->ShootRay(	sf::Mouse::getPosition().x,
 																sf::Mouse::getPosition().y,
 																m_pCamera0, false);
 			if(v2Intersection.x >= 0 && v2Intersection.y >= 0)
 			{
-				m_pModelMngr->SetDebugByNumber(true, static_cast<int>(v2Intersection.x), static_cast<int>(v2Intersection.y));
+				//m_pModelMngr->SetVisibleGrandBoundingObjectByNumber(true, static_cast<int>(v2Intersection.x), static_cast<int>(v2Intersection.y));
 				m_sSelectedObject = m_pModelMngr->GetInstanceName(static_cast<int>(v2Intersection.x));
 			}
 		}

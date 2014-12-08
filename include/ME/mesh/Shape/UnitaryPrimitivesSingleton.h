@@ -13,33 +13,37 @@ namespace MyEngine
 //System Class
 class MyEngineDLL UnitaryPrimitiveSingleton
 {
-	PrimitiveWireClass* m_pWireAxis;
-	PrimitiveWireClass* m_pWireCube;
-	PrimitiveWireClass* m_pWireSphere;
-	//PrimitiveWireClass* m_pCone;
-	//PrimitiveWireClass* m_pCylinder;
-	//PrimitiveWireClass* m_pTube;
+	static UnitaryPrimitiveSingleton* m_pInstance; // Singleton of the class
+	PrimitiveWireClass* m_pWireAxis; //Wire Axis primitive
+	PrimitiveWireClass* m_pWireCube; //Wire Cube primitive
+	PrimitiveWireClass* m_pWireSphere;//Wire sphere primitive
 public:
-	static UnitaryPrimitiveSingleton* GetInstance(); // Singleton accessor
-	void ReleaseInstance(void); //Singleton Release
+	/* Gets/Constructs the singleton pointer */
+	static UnitaryPrimitiveSingleton* GetInstance();
+	/* Destroys the singleton */
+	static void ReleaseInstance(void); //Singleton Release
 
-	//PrimitiveWireClass* GetWireCube(void);
-	//PrimitiveWireClass* GetWireSphere(void);
-
+	/* Renders the axis on the specified position*/
 	void RenderWireAxis(matrix4 a_mModelToWorld);
+	/* Renders the cube on the specified position*/
 	void RenderWireCube(matrix4 a_mModelToWorld, vector3 a_v3Color);
+	/* Renders the sphere on the specified position*/
 	void RenderWireSphere(matrix4 a_mModelToWorld, vector3 a_v3Color);
 	
 private:
-	UnitaryPrimitiveSingleton(void); // Constructor
-	UnitaryPrimitiveSingleton(UnitaryPrimitiveSingleton const& other); //Copy Constructor
-	UnitaryPrimitiveSingleton& operator=(UnitaryPrimitiveSingleton const& other); // Copy Assignment Operator
-	~UnitaryPrimitiveSingleton(void); // Destructor
+	/* Constructor */
+	UnitaryPrimitiveSingleton(void);
+	/* Copy constructor */
+	UnitaryPrimitiveSingleton(UnitaryPrimitiveSingleton const& other);
+	/* Copy Assignment operator */
+	UnitaryPrimitiveSingleton& operator=(UnitaryPrimitiveSingleton const& other);
+	/* Destructor */
+	~UnitaryPrimitiveSingleton(void);
 
-	void Release(void); // Release Memory
-	void Init(void); // Initialize variables
-	
-	static UnitaryPrimitiveSingleton* m_pInstance; // Singleton
+	/* Releases the objects memory */
+	void Release(void);
+	/* Initializates the objects fields */
+	void Init(void);
 };
 
 }

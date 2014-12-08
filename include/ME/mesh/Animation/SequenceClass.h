@@ -5,20 +5,21 @@ Date: 2014/05
 #ifndef __SEQUENCECLASS_H_
 #define __SEQUENCECLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 
 namespace MyEngine
 {
 
 class MyEngineDLL SequenceClass
 {
+	bool m_bDirectAnimation;//Secuence going from a low to a high frame number?
 	int m_nID;				//Secuence Identifier
-	String m_sName;			//Secuence Name
 	int m_nFirstFrame;		//First frame of the secuence;
 	int m_nLastFrame;		//Last frame of the secuence;
-	bool m_bDirectAnimation;//Secuence going from a low to a high frame number?
 	int m_nFrameRate;		//How many frames a secuence is playing
-	void Swap(SequenceClass& other);
+	int m_nFrames;			//Number of frames in this sequence;
+	String m_sName;			//Secuence Name
+	
 public:
 	SequenceClass();	//Constructor
 	SequenceClass(String a_sName, int a_nID, int a_nFirstFrame, int a_nLastFrame, int a_nFrameRate);
@@ -52,6 +53,11 @@ public:
 	void setFrameRate(int a_nFrameRate);
 	int GetFrameRate(void);
 	__declspec(property(put = SetFrameRate, get = GetFrameRate)) int FrameRate;
+
+	int GetNumberOfFrames(void);
+
+private:
+	void Swap(SequenceClass& other);
 };
 
 EXPIMP_TEMPLATE template class MyEngineDLL std::vector<SequenceClass>;

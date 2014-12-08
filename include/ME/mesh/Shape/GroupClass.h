@@ -6,40 +6,46 @@ Date: 2014/05
 #define __GROUP_H_
 
 #include "ME\mesh\shape\ShapeClass.h"
-#include "ME\materials\MaterialManagerClass.h"
+#include "ME\materials\MaterialManagerSingleton.h"
 #include "ME\mesh\Animation\FrameClass.h"
 #include "ME\mesh\Animation\AnimationClass.h"
-#include "mesh\physics\BoundingObjectClass.h"
-#include "mesh\debug\AxisClass.h"
+#include "ME\physics\BoundingObjectClass.h"
+#include "ME\Mesh\Shape\MeshManagerSingleton.h"
+#include "ME\mesh\debug\AxisClass.h"
 
 namespace MyEngine
 {
 
 class MyEngineDLL GroupClass
 {	
-	SystemClass* m_pSystem;
-	MaterialManagerClass* m_pMaterialManager;
-	GroupClass* m_pParent;
-	FrameClass* m_pFrame;
+	bool m_bVisible;	//Visibility flag
+	bool m_bVisibleBO;	//Debug flag
+	bool m_bCollidable;	//Collision flag
+	bool m_bGlobalized;	//Global coordinates flag
+	bool m_bModified;	//Modified flag
 
-	int m_nShapes;
-	int m_nHP;
-	int m_nFrames;
+	int m_nShapes;		//number of shapes in this group
+	int m_nHP;			//Hit Points of this group
+	int m_nFrames;		//Frames in this group
+	
+	SystemSingleton* m_pSystem;	//System pointer
+	MaterialManagerSingleton* m_pMatMngr;//Material Manager Pointer
+	MeshManagerSingleton* m_pMeshMngr;//Mesh Manager Pointer
+	GroupClass* m_pParent;	//Parent group pointer
+	FrameClass* m_pFrame;	//List of frames of animation in the group
+	BoundingObjectClass* m_pBO;	//Bounding Object of the group
+	AxisClass* m_pAxis;		//Axis of the group
+	
+	String m_sName;			//Name of the group
+	String m_sParent;		//Name of the parent of the group
 
-	bool m_bVisible;
-	bool m_bCollidable;
-	bool m_bGlobalized;
-	bool m_bDebug;
+	vector3 m_v3Pivot;		//Point in which the point is going to rotate around
+	matrix4 m_m4ToWorld;	//Model to world matrix
 
-	String m_sName;
-	String m_sParent;
-	vector3 m_v3Pivot;
-
-	matrix4 m_mToWorld;
-	std::vector<ShapeClass> m_vShape;
-
-	BoundingObjectClass* m_pBoundingObject;
-	AxisClass* m_pAxis;
+	std::vector<ShapeClass> m_vShape;//List of shapes that compose the group
+	std::vector<int> m_vMesh; //List of Meshes that compose a group
+	std::vector<int> m_vMeshM; //List of Meshes that compose a group when modified
+	matrix4 m_m4Mesh; //List of matrices for all Meshes that compose a group
 
 public:
 	GroupClass(void);
@@ -65,10 +71,6 @@ public:
 	int IdentifyShapeByMaterial( String a_sName);
 
 	bool CloneFromGroup(const GroupClass& other);
-
-	void Render(int a_nFrame = 0);//Render all shapes
-	void RenderDebug(bool a_bForce = false);//Render all debug
-	void RenderAxis(bool a_bForce = false);//Render all debug
 
 	void ReleaseOpenGL(); //DeleteOpenGL
 
@@ -121,7 +123,7 @@ public:
 
 	void SetVisible( bool bValue, int nFrame);
 	void SetKeyframe( bool bValue, int nFrame);
-	void SetDebug(bool a_bDebug);
+	void SetVisibleBO(bool a_bVisibleBO);
 	void SetVisibleAxis(bool a_bVisible);
 
 	void ComputeMatrix(void);
@@ -130,7 +132,7 @@ public:
 
 	glm::mat4& GetModelMatrix(void);
 
-	matrix4 TranverseHierarchy(GroupClass* group, int nFrame = 0);
+	matrix4 TraverseHierarchy(GroupClass* group, int nFrame = 0);
 
 	std::vector<vector3> GetVertices(int a_nShape = -1);
 
@@ -140,6 +142,15 @@ public:
 	void CompileBoundingObject(void);
 
 	bool IsColliding( vector3 a_v3RayOrigin, vector3 a_v3RayDirection, float& a_fDistance );
+
+	void DisconectAnimationFrames(void);
+
+	void SetModelMatrix(matrix4 a_nMatrix);
+
+	void Render(int a_nFrame = 0);//Render all shapes
+	void RenderBO(bool a_bForce = false);//Render all debug
+	void RenderAxis(bool a_bForce = false);//Render all debug
+
 private:
 	void Init(void);
 };

@@ -5,7 +5,7 @@ Date: 2014/07
 #ifndef __EXAMPLECLASS_H_
 #define __EXAMPLECLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 
 namespace MyEngine
 {
@@ -13,27 +13,39 @@ namespace MyEngine
 //System Class
 class MyEngineDLL ExampleClass
 {
-	int m_nData;
-	std::vector<int> m_vData;
+	int m_nData; //Number of elements in the list of elements
+	std::vector<int> m_vData; //list of elements
 
 public:
-	ExampleClass(void); // Constructor
-	ExampleClass(ExampleClass const& other); //Copy Constructor
-	ExampleClass& operator=(ExampleClass const& other); // Copy Assignment Operator
-	~ExampleClass(void); // Destructor
+	/* Constructor */
+	ExampleClass(void);
+	/* Copy Constructor */
+	ExampleClass(ExampleClass const& other);
+	/* Copy Assignment Operator*/
+	ExampleClass& operator=(ExampleClass const& other);
+	/* Destructor */
+	~ExampleClass(void);
 
-	void Swap(ExampleClass& other); // Initialize variables
+	/* Swaps the contents of the object with another object's content */
+	void Swap(ExampleClass& other);
 
+	/* Gets the number of enties of the list */
 	int GetData(void);
+	/* Sets a value in the list */
 	void SetData( int a_nData = 1);
+	/* Property GetData/SetData */
 	__declspec(property(get = GetData, put = SetData)) int Data;
 
+	/* Set data on the list at the end */
 	void SetDataOnVector(int a_nData);
+	/* Gets data out of the list at the specified index */
 	int& GetDataOnVector(int a_nIndex);
 	
 private:
-	void Release(void); // Release Memory
-	void Init(void); // Initialize variables
+	/* Releases the object from memory */
+	void Release(void);
+	/* Initialize the object's fields */
+	void Init(void);
 };
 
 EXPIMP_TEMPLATE template class MyEngineDLL std::vector<ExampleClass>;

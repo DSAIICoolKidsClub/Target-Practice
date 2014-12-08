@@ -21,6 +21,9 @@ void ApplicationClass::InitAppVariables()
 	wall3->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,10.5)) * glm::scale(vector3(21,2,.5)));
 	wall4->GenerateCube(1, MECYAN);
 	wall4->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,-10.5)) * glm::scale(vector3(21,2,.5)));
+
+	m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), vector3(0.0f, 2.0f, 0.0f)), 1, 1, 0);
+	m_v3BulletDirection = vector3(0.0f);
 }
 void ApplicationClass::Update (void)
 {
@@ -53,19 +56,19 @@ void ApplicationClass::Update (void)
 	
 	if(true)
 	{
-		matrix4 matrix;
+		//matrix4 matrix;
 	
-		int size = static_cast<int>(bullets.size());
-		for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
-		{
-			String temp = m_pModelMngr->GetInstanceName(i);
-			//const char* temmp = temp[0];
-			if (temp[0] == 'B')
-			{
-				matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix(m_pModelMngr->GetInstanceName(i));
-				m_pModelMngr->SetModelMatrix(matrix, m_pModelMngr->GetInstanceName(i));
-			}
-		}
+		//int size = static_cast<int>(bullets.size());
+		//for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
+		//{
+		//	String temp = m_pModelMngr->GetInstanceName(i);
+		//	//const char* temmp = temp[0];
+		//	if (temp[0] == 'B')
+		//	{
+		//		matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix(m_pModelMngr->GetInstanceName(i));
+		//		m_pModelMngr->SetModelMatrix(matrix, m_pModelMngr->GetInstanceName(i));
+		//	}
+		//}
 	}
 
 	float targetx = rand() % 10  - 5;
@@ -82,6 +85,12 @@ void ApplicationClass::Update (void)
 	}
 
 
+
+	matrix4 m4Bullet = m_pModelMngr->GetModelMatrix("Bullet");
+	m4Bullet = glm::translate(m4Bullet, m_v3BulletDirection);
+	m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
+
+
 	static bool bObjectSelected = false;
 	if(!bObjectSelected)
 	{
@@ -89,7 +98,7 @@ void ApplicationClass::Update (void)
 		if(m_pModelMngr->GetNumberOfInstances() > 0)
 		{
 			//if so, select the first one on the List
-			m_sSelectedObject = m_pModelMngr->m_vInstance[0]->GetName();
+			m_sSelectedObject = m_pModelMngr->GetInstanceByIndex(0)->GetName();
 			bObjectSelected = true;
 		}
 	}
@@ -103,7 +112,7 @@ void ApplicationClass::Update (void)
 
 	vector3 position = vector3(	static_cast<GLfloat>(cos(theta)) * radius,	fHeight, -static_cast<GLfloat>(sin(theta)) * radius);
 	m_pLightMngr->SetPosition(position);
-	m_pLightBulb->SetModelMatrix(glm::translate(matrix4(1.0), m_pLightMngr->GetLight().Position)); //update cube position at light position
+	m_pLightBulb->SetModelMatrix(glm::translate(matrix4(1.0), m_pLightMngr->GetLight()->Position)); //update cube position at light position
 
 	m_pModelMngr->Update();
 	

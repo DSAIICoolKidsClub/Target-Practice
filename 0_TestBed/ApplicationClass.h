@@ -28,17 +28,19 @@ private:
 	float targltime;
 	float targtimechange;
 
+	vector3 m_v3BulletDirection;
+
 	vector3 movement;
 	bool isFired;
 	std::vector<int> bullets;
 
 	static ApplicationClass* m_pInstance;
-	SystemClass* m_pSystem;
-	GLSystemClass* m_pGLSystem;
+	SystemSingleton* m_pSystem;
+	GLSystemSingleton* m_pGLSystem;
 	WindowClass* m_pWindow;
-	ModelManagerClass* m_pModelMngr;
-	LightManagerClass* m_pLightMngr;
-	MaterialManagerClass* pMatMngr;
+	ModelManagerSingleton* m_pModelMngr;
+	LightManagerSingleton* m_pLightMngr;
+	MaterialManagerSingleton* pMatMngr;
 	GridClass* pGrid;
 	PrimitiveClass* m_pLightBulb;
 	//std::vector<PrimitiveClass> environment;
@@ -51,7 +53,7 @@ private:
 	bool m_bFPC;
 	String m_sSelectedObject;
 	bool m_bArcBall;
-	CameraClass* m_pCamera0;
+	CameraSingleton* m_pCamera0;
 	bool m_bForceNewConfig;
 
 	void Update (void);

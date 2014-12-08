@@ -5,7 +5,7 @@ Date: 2014/06
 #ifndef __SHADERCLASS_H_
 #define __SHADERCLASS_H_
 
-#include "ME\system\SystemClass.h"
+#include "ME\system\SystemSingleton.h"
 #include "ME\system\ShaderCompiler.h"
 
 namespace MyEngine

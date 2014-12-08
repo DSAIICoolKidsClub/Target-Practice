@@ -87,9 +87,9 @@ void ApplicationClass::Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow
 		m_pWindow->CreateConsoleWindow();
 	}
 
-	m_pSystem = SystemClass::GetInstance();
-	m_pLightMngr = LightManagerClass::GetInstance();
-	pMatMngr = MaterialManagerClass::GetInstance();
+	m_pSystem = SystemSingleton::GetInstance();
+	m_pLightMngr = LightManagerSingleton::GetInstance();
+	pMatMngr = MaterialManagerSingleton::GetInstance();
 
 	m_bForceNewConfig = false;
 	InitAppSystem();
@@ -105,7 +105,7 @@ void ApplicationClass::Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow
 
 	m_pWindow->CreateMEWindow(wide.c_str(), m_pSystem->WindowWidth, m_pSystem->WindowHeight);
 	
-	m_pGLSystem = GLSystemClass::GetInstance();
+	m_pGLSystem = GLSystemSingleton::GetInstance();
 	//Check if OPENGL Context is enabled
 	if(m_pSystem->m_RenderingContext == OPENGL2X || m_pSystem->m_RenderingContext == OPENGL3X)
 	{
@@ -125,8 +125,8 @@ void ApplicationClass::Init( HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow
 		glClearColor(0.4f, 0.6f, 0.9f, 0.0f);
 	}
 
-	m_pCamera0 = CameraClass::GetInstance();
-	m_pModelMngr = ModelManagerClass::GetInstance();
+	m_pCamera0 = CameraSingleton::GetInstance();
+	m_pModelMngr = ModelManagerSingleton::GetInstance();
 	InitAppInternalVariables();
 	InitAppVariables();
 
@@ -374,7 +374,7 @@ void ApplicationClass::InitAppInternalVariables()
 	if(m_pSystem->m_RenderingContext != OPENGL3X)
 		exit(0);
 
-	LineManagerClass* pLineMngr = LineManagerClass::GetInstance();
+	LineManagerSingleton* pLineMngr = LineManagerSingleton::GetInstance();
 
 	m_bArcBall = false;
 	m_bFPC = false;
@@ -397,13 +397,13 @@ void ApplicationClass::InitAppInternalVariables()
 	wall2 = new PrimitiveClass();
 	wall3 = new PrimitiveClass();
 	wall4 = new PrimitiveClass();
-	m_pLightBulb->GenerateSphere(0.1f, 3, m_pLightMngr->GetLight(1).GetColor());
+	m_pLightBulb->GenerateSphere(0.1f, 3, MEWHITE);
 }
 void ApplicationClass::Release()
 {
 	m_pLightMngr->ReleaseInstance();
 	
-	LineManagerClass* pLineMngr = LineManagerClass::GetInstance();
+	LineManagerSingleton* pLineMngr = LineManagerSingleton::GetInstance();
 	pLineMngr->ReleaseInstance();
 }
 void ApplicationClass::Idle (void)

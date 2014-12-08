@@ -19,10 +19,9 @@ class MyEngineDLL AxisClass
 	vector3 m_v3Pivot;		//Pivot of rotation in local space
 	vector3 m_v3Centroid;	//Centroid of shape in local space
 
-	matrix4 m_mModelToWorld;//Model matrix of the box
-
-	matrix4 m_mPivot;	//Pivot space in global
-	matrix4 m_mCentroid;//Centroid in global
+	matrix4 m_m4ToWorld;//Model to World maatrix
+	matrix4 m_mPivot;	//Pivot origin in global coordinates
+	matrix4 m_mCentroid;//Centroid in global coordinates
 
 	UnitaryPrimitiveSingleton* m_pPrimitiveMngr;
 public:
