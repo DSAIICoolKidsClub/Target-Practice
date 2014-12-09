@@ -69,14 +69,14 @@ void ApplicationClass::Update (void)
 		//}
 	}
 
-	float targetx = rand() % 10  - 5;
-	float targetz = rand() %10  - 5;
+	float targetx = rand() % 8  - 3;
+	float targetz = rand() % 8  - 5;
 	vector3 tarTrans;
 	matrix4 targPos;
 	// 
 	targtimechange = timer - targltime;
 
-	if(targtimechange >= 3000)
+	if(targtimechange >= 10000)
 	{
 		//if (up == false)
 		//{
