@@ -4,13 +4,6 @@ void ApplicationClass::InitAppVariables()
 	srand(time(0));
 	canFire = true;
 	lastTime = 0;
-	float fSpace = 4.0f;
-	for(int n = 0 ; n < 2; n++)
-	{
-		m_pModelMngr->LoadModel("AnimatedCubes.obj", "Cubos", glm::translate(matrix4(1.0f), vector3(fSpace * n, 0.0f, 0.0f * n)), 1, 1, 0);
-	}
-
-	m_pModelMngr->LoadModel("AnimatedCubes.obj", "Cubos", glm::translate(matrix4(1.0f), vector3(fSpace * -1, 0.0f, 0.0f)), 0, 1, 0);
 	ground->GenerateCube(1, MEBROWN);
 	ground->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,-.5,0)) * glm::scale(vector3(21,1,21)));
 	wall1->GenerateCube(1, MEGREEN);
@@ -22,8 +15,13 @@ void ApplicationClass::InitAppVariables()
 	wall4->GenerateCube(1, MECYAN);
 	wall4->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,-10.5)) * glm::scale(vector3(21,2,.5)));
 
-	m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), vector3(0.0f, 2.0f, 0.0f)), 1, 1, 0);
+	m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), vector3(0.0f, -3.0f, 0.0f)), 1, 1, 0);
+	m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(3.0f, 1.0f, 3.0f)), 1, 1, 0);
+	//m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(-3.0f, -3.0f, 3.0f)), 1, 1, 0);
+	//m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(3.0f, -3.0f, -3.0f)), 1, 1, 0);
 	m_v3BulletDirection = vector3(0.0f);
+	up = false;
+	//targNum = 0;
 }
 void ApplicationClass::Update (void)
 {
@@ -73,13 +71,44 @@ void ApplicationClass::Update (void)
 
 	float targetx = rand() % 10  - 5;
 	float targetz = rand() %10  - 5;
-	vector3 tarpos;
+	vector3 tarTrans;
+	matrix4 targPos;
+	// 
 	targtimechange = timer - targltime;
 
-	if(targtimechange >= 1000)
+	if(targtimechange >= 3000)
 	{
-		tarpos = vector3(targetx, 3.0f, targetz);
-		m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), tarpos), 1, 1, 0);
+		//if (up == false)
+		//{
+		//	std::cout << "nbfhdsbdasj" << std::endl;
+		//	tarTrans = vector3(targetx, 3.0f, targetz);
+		//	//up = true;
+		//}
+		//else
+		//{
+			tarTrans = vector3(targetx, 0.0f, targetz);
+		//}
+		/*if (targNum == 2)
+		{
+			targPos = m_pModelMngr->GetModelMatrix("Target1");
+			targPos = glm::translate(targPos, tarTrans);
+			m_pModelMngr->SetModelMatrix(targPos, "Target1");
+			targNum = 0;
+		}
+		else if (targNum == 1)
+		{
+			targPos = m_pModelMngr->GetModelMatrix("Target0");
+			targPos = glm::translate(targPos, tarTrans);
+			m_pModelMngr->SetModelMatrix(targPos, "Target0");
+			targNum++;
+		}
+		else if (targNum == 0)
+		{*/
+			targPos = m_pModelMngr->GetModelMatrix("Target");
+			targPos = glm::translate(targPos, tarTrans);
+			m_pModelMngr->SetModelMatrix(targPos, "Target");
+			//targNum++;
+		//}
 		targltime = timer;
 		//std::cout << "whatus up";
 	}
@@ -131,7 +160,15 @@ void ApplicationClass::Update (void)
 	for(int n = 0; n < nListSize; n++)
 	{
 		vector4 entry = vCollisionList[n];
-		m_pModelMngr->SetShaderProgramByNumber(static_cast<int>(entry.x),static_cast<int>(entry.y), "GrayScale");
+		std::cout << n << std::endl;
+		//m_pModelMngr->SetShaderProgramByNumber(static_cast<int>(entry.x),static_cast<int>(entry.y), "GrayScale");
+		m_v3BulletDirection = vector3(0.0f);
+		m4Bullet = glm::translate(m4Bullet, vector3(0,-3,0));
+		m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
+		targPos = glm::translate(targPos, vector3(rand() % 10 -5,1,rand()% 10-5));
+		m_pModelMngr->SetModelMatrix(targPos, "Target");
+		up = false;
+		targltime = timer;
 	}
 
 

@@ -30,6 +30,9 @@ private:
 
 	vector3 m_v3BulletDirection;
 
+	float targNum;
+	bool up;
+
 	vector3 movement;
 	bool isFired;
 	std::vector<int> bullets;
