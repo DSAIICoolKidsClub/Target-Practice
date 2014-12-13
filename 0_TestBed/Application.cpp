@@ -51,32 +51,14 @@ void ApplicationClass::Update (void)
 	movement = vector3(0.0f, 0.0f, -1.0f);
 	movement *= progress;
 
-	
-	if(true)
-	{
-		//matrix4 matrix;
-	
-		//int size = static_cast<int>(bullets.size());
-		//for(int i = 0; i < m_pModelMngr->GetNumberOfInstances(); i++)
-		//{
-		//	String temp = m_pModelMngr->GetInstanceName(i);
-		//	//const char* temmp = temp[0];
-		//	if (temp[0] == 'B')
-		//	{
-		//		matrix = glm::translate(matrix4(1.0f),movement) * m_pModelMngr->GetModelMatrix(m_pModelMngr->GetInstanceName(i));
-		//		m_pModelMngr->SetModelMatrix(matrix, m_pModelMngr->GetInstanceName(i));
-		//	}
-		//}
-	}
-
-	float targetx = rand() % 8  - 3;
-	float targetz = rand() % 8  - 5;
+	float targetx = rand() % 8  - 4;
+	float targetz = rand() % 8  - 4;
 	vector3 tarTrans;
 	matrix4 targPos;
 	// 
 	targtimechange = timer - targltime;
 
-	if(targtimechange >= 10000)
+	if(targtimechange >= 3000)
 	{
 		//if (up == false)
 		//{
@@ -154,6 +136,21 @@ void ApplicationClass::Update (void)
 		CameraRotation();
 	
 	m_pModelMngr->SetShaderProgramByName("All", "Original");
+
+	if (m_pModelMngr->GetInstanceByName("Bullet") != nullptr)
+	{
+		bullBound = m_pModelMngr->GetInstanceByName("Bullet")->GetGrandBoundingObject();
+		if ((bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 0 && bullBound->GetCentroidGlobal().x + bullBound->HalfWidth.x < 10 && bullBound->GetCentroidGlobal().x - bullBound->HalfWidth.x > -10 && bullBound->GetCentroidGlobal().z - bullBound->HalfWidth.z > -10 && bullBound->GetCentroidGlobal().z + bullBound->HalfWidth.z < 10) ||
+			(bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y > 0 && bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 1 && bullBound->GetCentroidGlobal().x + bullBound->HalfWidth.x > 10 && bullBound->GetCentroidGlobal().x - bullBound->HalfWidth.x < 11) ||
+			(bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y > 0 && bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 1 && bullBound->GetCentroidGlobal().x - bullBound->HalfWidth.x < -10 && bullBound->GetCentroidGlobal().x + bullBound->HalfWidth.x > -11) ||
+			(bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y > 0 && bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 1 && bullBound->GetCentroidGlobal().z - bullBound->HalfWidth.z < -10 && bullBound->GetCentroidGlobal().z + bullBound->HalfWidth.z > -11) ||
+			(bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y > 0 && bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 1 && bullBound->GetCentroidGlobal().z + bullBound->HalfWidth.z > 10 && bullBound->GetCentroidGlobal().z - bullBound->HalfWidth.z < 11))
+		{
+			m_v3BulletDirection = vector3(0.0f);
+			m4Bullet = glm::translate(m4Bullet, vector3(0,-3,0));
+			m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
+		}
+	}
 	
 	std::vector<vector4> vCollisionList = m_pModelMngr->GetCollisionList();
 	int nListSize = static_cast<int> (vCollisionList.size());

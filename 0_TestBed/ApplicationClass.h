@@ -45,8 +45,8 @@ private:
 	LightManagerSingleton* m_pLightMngr;
 	MaterialManagerSingleton* pMatMngr;
 	GridClass* pGrid;
+	BoundingObjectClass* bullBound;
 	PrimitiveClass* m_pLightBulb;
-	//std::vector<PrimitiveClass> environment;
 	PrimitiveClass* ground;
 	PrimitiveClass* wall1;
 	PrimitiveClass* wall2;
