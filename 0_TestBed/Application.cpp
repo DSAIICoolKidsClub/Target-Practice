@@ -39,7 +39,7 @@ void ApplicationClass::Update (void)
 	currentTime = GetTickCount();
 	DWORD difference = currentTime - mlastTime;
 
-	float progress = difference * 1.0f / 2000.0f;
+	float progress = difference / 1000.0f;
 
 	if(progress > 0.0f)
 	{
