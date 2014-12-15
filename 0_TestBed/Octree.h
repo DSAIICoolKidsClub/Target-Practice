@@ -10,7 +10,7 @@ class Octree
 	OctreePoint *data;
 
 	public:
-		Octree(const vector3& origin) 
+		Octree(vector3& origin) 
 			: origin(origin), data(NULL) {
 				// Initially, there are no children
 				for(int i=0; i<8; ++i) 
@@ -38,45 +38,6 @@ class Octree
 			return oct;
 		}
 
-		bool isLeafNode() 
-		{
-			return children[0] == NULL;
-		}
-
-		int insert(OctreePoint* point) 
-		{
-			int octant = 0;
-			if(isLeafNode()) 
-			{
-				if(data==NULL) 
-				{
-					data = point;
-					return 0;
-				} 
-				else 
-				{
-					/*OctreePoint *oldPoint = data;
-					data = NULL;
-
-					for(int i=0; i<8; ++i)
-					{
-						vector3 newOrigin = origin;
-						newOrigin.x += halfd.x * (i&4 ? .5f : -.5f);
-						newOrigin.y += halfd.y * (i&2 ? .5f : -.5f);
-						newOrigin.z += halfd.z * (i&1 ? .5f : -.5f);
-						children[i] = new Octree(newOrigin, halfd*.5f);
-					}
-
-					children[getOctantContainingPoint(oldPoint->getPosition())]->insert(oldPoint);
-					children[getOctantContainingPoint(point->getPosition())]->insert(point);*/
-				}
-			} 
-			else 
-			{
-				octant = getOctantContainingPoint(point->getPosition());
-				children[octant]->insert(point);
-			}
-			return octant;
-		}
+		
 
 };

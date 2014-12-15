@@ -15,7 +15,7 @@ void ApplicationClass::InitAppVariables()
 	wall4->GenerateCube(1, MECYAN);
 	wall4->SetModelMatrix(glm::translate(matrix4(1.0f), vector3(0,.25,-10.5)) * glm::scale(vector3(21,2,.5)));
 
-	m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), vector3(0.0f, -3.0f, 0.0f)), 1, 1, 0);
+	m_pModelMngr->LoadModel("Bullet.obj", "Bullet", glm::translate(matrix4(1.0f), vector3(0.0f, -20.0f, 0.0f)), 1, 1, 0);
 	m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(3.0f, 1.0f, 3.0f)), 1, 1, 0);
 	//m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(-3.0f, -3.0f, 3.0f)), 1, 1, 0);
 	//m_pModelMngr->LoadModel("target.obj", "Target", glm::translate(matrix4(1.0f), vector3(3.0f, -3.0f, -3.0f)), 1, 1, 0);
@@ -25,24 +25,6 @@ void ApplicationClass::InitAppVariables()
 }
 void ApplicationClass::Update (void)
 {
-	
-	/*std::vector<int> list;
-	list.push_back(1);
-	list.push_back(3);
-	list.push_back(8);*/
-	InstanceClass* temp = m_pModelMngr->GetInstanceByName("Bullet");
-	//temp->SetOctantList(list);
-
-	BoundingObjectClass* bo = temp->GetGrandBoundingObject();
-	
-	tree = new Octree(vector3(0,0,0));
-	//bo->SetInOctantList(&tree->insert(OctreePoint()));
-	vector3 *pos = bo->GetCentroidGlobal;
-	std::cout<< "Region: " << tree->getOctantContainingPoint(*pos) << std::endl;
-
-	/*bo->SetInOctantList(1);
-	bo->SetInOctantList(3);
-	bo->SetInOctantList(8);*/
 	
 	m_pSystem->UpdateTime(); //Update the system
 	timer = GetCurrentTime();
@@ -65,7 +47,7 @@ void ApplicationClass::Update (void)
 		mlastTime = currentTime;
 	}
 
-	std::cout << "prog : " << progress;
+	//std::cout << "prog : " << progress;
 
 	movement = vector3(0.0f, 0.0f, -1.0f);
 	movement *= progress;
@@ -166,29 +148,49 @@ void ApplicationClass::Update (void)
 			(bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y > 0 && bullBound->GetCentroidGlobal().y - bullBound->HalfWidth.y < 1 && bullBound->GetCentroidGlobal().z + bullBound->HalfWidth.z > 10 && bullBound->GetCentroidGlobal().z - bullBound->HalfWidth.z < 11))
 		{
 			m_v3BulletDirection = vector3(0.0f);
-			m4Bullet = glm::translate(m4Bullet, vector3(0,-3,0));
+			m4Bullet = glm::translate(m4Bullet, vector3(0,-20,0));
 			m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
 		}
 	}
 	
-	std::vector<vector4> vCollisionList = m_pModelMngr->GetCollisionList();
-	int nListSize = static_cast<int> (vCollisionList.size());
-	for(int n = 0; n < nListSize; n++)
+	if(m_pModelMngr->GetInstanceByName("Bullet") != nullptr && m_pModelMngr->GetInstanceByName("Target") != nullptr)
 	{
-		vector4 entry = vCollisionList[n];
-		std::cout << n << std::endl;
-		//m_pModelMngr->SetShaderProgramByNumber(static_cast<int>(entry.x),static_cast<int>(entry.y), "GrayScale");
-		m_v3BulletDirection = vector3(0.0f);
-		m4Bullet = glm::translate(m4Bullet, vector3(0,-3,0));
-		m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
-		targPos = glm::translate(targPos, vector3(rand() % 10 -5,1,rand()% 10-5));
-		m_pModelMngr->SetModelMatrix(targPos, "Target");
-		up = false;
-		targltime = timer;
+		InstanceClass* bull = m_pModelMngr->GetInstanceByName("Bullet");
+		InstanceClass* tart = m_pModelMngr->GetInstanceByName("Target");
+
+		BoundingObjectClass *bbull = bull->GetGrandBoundingObject();
+		BoundingObjectClass *btart = tart->GetGrandBoundingObject();
+	
+		tree = new Octree(vector3(0.0f,0.0f,0.0f));
+
+		std::cout<< "Bullet Region: " << tree->getOctantContainingPoint(bbull->GetCentroidGlobal()) << std::endl;
+		std::cout<< "Target Region: " << tree->getOctantContainingPoint(btart->GetCentroidGlobal()) << std::endl;
+		bbull->SetInOctantList(tree->getOctantContainingPoint(bbull->GetCentroidGlobal()));
+		btart->SetInOctantList(tree->getOctantContainingPoint(btart->GetCentroidGlobal()));
+		if(bbull->InTheSameOctant(*btart))
+		{
+			std::vector<vector4> vCollisionList = m_pModelMngr->GetCollisionList();
+		int nListSize = static_cast<int> (vCollisionList.size());
+		for(int n = 0; n < nListSize; n++)
+		{
+			vector4 entry = vCollisionList[n];
+			std::cout << n << std::endl;
+			//m_pModelMngr->SetShaderProgramByNumber(static_cast<int>(entry.x),static_cast<int>(entry.y), "GrayScale");
+			m_v3BulletDirection = vector3(0.0f);
+			m4Bullet = glm::translate(m4Bullet, vector3(0,-20,0));
+			m_pModelMngr->SetModelMatrix(m4Bullet, "Bullet");
+			targPos = glm::translate(targPos, vector3(rand() % 10 -5,1,rand()% 10-5));
+			m_pModelMngr->SetModelMatrix(targPos, "Target");
+			up = false;
+			targltime = timer;
+		}
+		}
+		bbull->ClearOctantList();
+		btart->ClearOctantList();
 	}
 
 
-	printf("FPS: %d \r", m_pSystem->FPS);//print the Frames per Second
+	//printf("FPS: %d \r", m_pSystem->FPS);//print the Frames per Second
 }
 
 void ApplicationClass::Display3X (void) //for OpenGL 3.X Applications

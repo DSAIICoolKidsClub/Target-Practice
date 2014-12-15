@@ -75,7 +75,7 @@ void ApplicationClass::ProcessKeyboard(void)
 
 		m_v3BulletDirection = m_pCamera0->GetForwardVector();
 		m_v3BulletDirection = glm::normalize(m_v3BulletDirection);
-		m_v3BulletDirection *= .75f;
+		m_v3BulletDirection *= .1f;
 		canFire = false;
 		lastTime = timer;
 	}
