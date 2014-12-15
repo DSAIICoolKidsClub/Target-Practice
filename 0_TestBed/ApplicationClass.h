@@ -11,6 +11,8 @@ Date: 2014/10
 #include <SFML\Graphics.hpp>
 #include <chrono>
 
+#include "Octree.h"
+
 using namespace MyEngine;
 
 class ApplicationClass
@@ -36,6 +38,8 @@ private:
 	vector3 movement;
 	bool isFired;
 	std::vector<int> bullets;
+	Octree *tree;
+	OctreePoint *point;
 
 	static ApplicationClass* m_pInstance;
 	SystemSingleton* m_pSystem;

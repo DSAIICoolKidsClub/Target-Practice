@@ -25,6 +25,25 @@ void ApplicationClass::InitAppVariables()
 }
 void ApplicationClass::Update (void)
 {
+	
+	/*std::vector<int> list;
+	list.push_back(1);
+	list.push_back(3);
+	list.push_back(8);*/
+	InstanceClass* temp = m_pModelMngr->GetInstanceByName("Bullet");
+	//temp->SetOctantList(list);
+
+	BoundingObjectClass* bo = temp->GetGrandBoundingObject();
+	
+	tree = new Octree(vector3(0,0,0));
+	//bo->SetInOctantList(&tree->insert(OctreePoint()));
+	vector3 *pos = bo->GetCentroidGlobal;
+	std::cout<< "Region: " << tree->getOctantContainingPoint(*pos) << std::endl;
+
+	/*bo->SetInOctantList(1);
+	bo->SetInOctantList(3);
+	bo->SetInOctantList(8);*/
+	
 	m_pSystem->UpdateTime(); //Update the system
 	timer = GetCurrentTime();
 

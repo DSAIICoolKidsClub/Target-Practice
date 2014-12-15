@@ -106,6 +106,8 @@ xcopy "$(SolutionDir)include\ME\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Com
     <ClInclude Include="..\res\Resource.h" />
     <ClInclude Include="ApplicationClass.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="Octree.h" />
+    <ClInclude Include="OctreePoint.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
