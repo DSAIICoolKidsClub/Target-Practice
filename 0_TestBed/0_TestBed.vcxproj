@@ -108,7 +108,6 @@ xcopy "$(SolutionDir)include\ME\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Com
     <ClInclude Include="Main.h" />
     <ClInclude Include="Octree.h" />
     <ClInclude Include="OctreePoint.h" />
-    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\res\BTO.rc" />
@@ -118,7 +117,6 @@ xcopy "$(SolutionDir)include\ME\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Com
     <ClCompile Include="ApplicationClass.cpp" />
     <ClCompile Include="ApplicationControls.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

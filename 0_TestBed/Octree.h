@@ -10,6 +10,7 @@ class Octree
 	OctreePoint *data;
 
 	public:
+		//Constructor
 		Octree(vector3& origin) 
 			: origin(origin), data(NULL) {
 				// Initially, there are no children
@@ -17,11 +18,13 @@ class Octree
 					children[i] = NULL;
 			}
 
+		//Copy Constructor
 		Octree(const Octree& copy)
 			: origin(copy.origin), halfd(copy.halfd), data(copy.data) {
 
 			}
 
+		//Destructor
 		~Octree() 
 		{
 			// Recursively destroy octants
@@ -29,6 +32,7 @@ class Octree
 				delete children[i];
 		}
 
+		//Gets the containing point
 		int getOctantContainingPoint(vector3 point) 
 		{
 			int oct = 0;

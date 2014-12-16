@@ -69,13 +69,14 @@ void ApplicationClass::ProcessKeyboard(void)
 		
 		m_pModelMngr->SetModelMatrix(matrix, m_sSelectedObject);
 	}
+
+	//Handles firing the bullets
 	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && canFire == true)
 	{
 		m_pModelMngr->SetModelMatrix(glm::translate(matrix4(1.0f), m_pCamera0->GetPosition()), "Bullet");
-
 		m_v3BulletDirection = m_pCamera0->GetForwardVector();
 		m_v3BulletDirection = glm::normalize(m_v3BulletDirection);
-		m_v3BulletDirection *= .1f;
+		m_v3BulletDirection *= .5f;
 		canFire = false;
 		lastTime = timer;
 	}
@@ -406,6 +407,5 @@ void ApplicationClass::ArcBall(float a_fSensitivity)
 		arcball = glm::rotate(arcball, -a_fSensitivity * DeltaMouse, vector3(1.0f, 0.0f, 0.0f));
 	}
 
-	//m_pCamera0->Rotate(fVerticalAngle, fHorizontalAngle);
 	m_pModelMngr->SetModelMatrix(arcball, m_sSelectedObject);
 }

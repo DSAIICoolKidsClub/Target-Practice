@@ -37,7 +37,6 @@ private:
 
 	vector3 movement;
 	bool isFired;
-	std::vector<int> bullets;
 	Octree *tree;
 	OctreePoint *point;
 
