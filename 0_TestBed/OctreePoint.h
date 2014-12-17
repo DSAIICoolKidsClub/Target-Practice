@@ -1,6 +1,6 @@
 #pragma once
 #include "ME\MyEngine.h"
-
+// point in the octtree 
 class OctreePoint
 {
 	vector3 position;
